@@ -1,0 +1,15 @@
+{
+  "name": "hopeful-franklin-monorepo",
+  "private": true,
+  "workspaces": [
+    "addon",
+    "demo"
+  ],
+  "scripts": {
+    "addon:build": "npm run build --workspace=addon",
+    "addon:watch": "npm run watch --workspace=addon",
+    "demo:storybook": "npm run storybook --workspace=demo",
+    "build": "npm run addon:build",
+    "storybook": "npm run demo:storybook"
+  }
+}
