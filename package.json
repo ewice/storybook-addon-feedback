@@ -10,6 +10,11 @@
     "addon:watch": "npm run watch --workspace=addon",
     "demo:storybook": "npm run storybook --workspace=demo",
     "build": "npm run addon:build",
-    "storybook": "npm run demo:storybook"
+    "storybook": "npm run demo:storybook",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3"
   }
 }

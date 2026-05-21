@@ -1,6 +1,0 @@
-import{j as t}from"./jsx-runtime-DQZO7EKT.js";import"./iframe-B5azqinh.js";import"./preload-helper-C1FmrZbK.js";const n=({title:i,content:a})=>{const d={padding:"16px",borderRadius:"8px",border:"1px solid #e2e8f0",backgroundColor:"#ffffff",fontFamily:"sans-serif",maxWidth:"300px",boxShadow:"0 1px 3px rgba(0,0,0,0.1)"};return t.jsxs("div",{style:d,children:[t.jsx("h3",{style:{margin:"0 0 8px 0",fontSize:"16px",color:"#1e293b"},children:i}),t.jsx("p",{style:{margin:0,fontSize:"14px",color:"#64748b",lineHeight:"1.5"},children:a})]})};n.__docgenInfo={description:"",methods:[],displayName:"Card",props:{title:{required:!0,tsType:{name:"string"},description:""},content:{required:!0,tsType:{name:"string"},description:""}}};const u={title:"Components/Card",component:n},e={args:{title:"Hello Storybook",content:"This is a beautiful card designed to show how easy it is to test navigation counts in our feedback survey addon."}};var o,r,s;e.parameters={...e.parameters,docs:{...(o=e.parameters)==null?void 0:o.docs,source:{originalSource:`{
-  args: {
-    title: 'Hello Storybook',
-    content: 'This is a beautiful card designed to show how easy it is to test navigation counts in our feedback survey addon.'
-  }
-}`,...(s=(r=e.parameters)==null?void 0:r.docs)==null?void 0:s.source}}};const m=["Default"];export{e as Default,m as __namedExportsOrder,u as default};

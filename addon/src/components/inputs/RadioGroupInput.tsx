@@ -8,28 +8,30 @@ interface RadioGroupInputProps {
   onChange: (option: string) => void;
   ariaDescribedBy?: string;
   ariaInvalid?: boolean;
+  direction?: 'row' | 'column';
 }
 
 export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
+  ariaDescribedBy,
+  ariaInvalid,
+  direction,
   name,
   options,
   value,
   onChange,
-  ariaDescribedBy,
-  ariaInvalid,
 }) => {
   return (
-    <ChoiceGroup>
+    <ChoiceGroup direction={direction}>
       {options.map((option, index) => (
         <ChoiceRow key={option} htmlFor={`${name}-${index}`}>
           <ChoiceInput
-            id={`${name}-${index}`}
-            type="radio"
-            name={name}
-            checked={value === option}
-            onChange={() => onChange(option)}
             aria-describedby={ariaDescribedBy}
             aria-invalid={ariaInvalid || undefined}
+            checked={value === option}
+            id={`${name}-${index}`}
+            name={name}
+            type="radio"
+            onChange={() => onChange(option)}
           />
           {option}
         </ChoiceRow>

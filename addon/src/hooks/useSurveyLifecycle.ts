@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SurveyConfig } from '../types';
 
 export interface SurveyLifecycleProps {
@@ -9,6 +9,7 @@ export interface SurveyLifecycleProps {
   impressionCount: number;
   incrementImpressions: () => number;
   api: any; // Storybook Channel API
+  isSessionDismissed: boolean;
 }
 
 export const useSurveyLifecycle = ({
@@ -19,6 +20,7 @@ export const useSurveyLifecycle = ({
   impressionCount,
   incrementImpressions,
   api,
+  isSessionDismissed,
 }: SurveyLifecycleProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [navCount, setNavCount] = useState(0);
@@ -46,6 +48,7 @@ export const useSurveyLifecycle = ({
   const shouldBlockAutoPopup =
     isCompleted ||
     isSkippedPermanently ||
+    isSessionDismissed ||
     isExpired ||
     isGloballyDisabled ||
     isMaxImpressionsReached ||
@@ -84,7 +87,8 @@ export const useSurveyLifecycle = ({
     const handleStoryChanged = () => {
       setNavCount((prev) => {
         const nextCount = prev + 1;
-        const requiredNavs = triggerOptions.storyCount !== undefined ? triggerOptions.storyCount : 3;
+        const requiredNavs =
+          triggerOptions.storyCount !== undefined ? triggerOptions.storyCount : 3;
 
         if (!shouldBlockAutoPopup && !isOpen && requiredNavs > 0 && nextCount >= requiredNavs) {
           incrementImpressions();

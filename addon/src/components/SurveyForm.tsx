@@ -5,17 +5,20 @@ import { useSurveyStorage } from '../hooks/useSurveyStorage';
 import { CheckboxGroupInput } from './inputs/CheckboxGroupInput';
 import { RadioGroupInput } from './inputs/RadioGroupInput';
 import { StarRatingInput } from './inputs/StarRatingInput';
-import { TextAreaField, TextInputField } from './inputs/TextInputFields';
+import { TextInputField } from './inputs/TextInputField';
+import { TextAreaField } from './inputs/TextAreaField';
 import { Button } from './ui/Button';
-import { ErrorSummary, Field, Fieldset } from './ui/Field';
-import { mutedTextStyles, uiFontFamily } from './ui/styles';
+import { Field } from './ui/Field';
+import { Fieldset } from './ui/Fieldset';
+import { ErrorSummary } from './ui/ErrorSummary';
+import { SurveyThankYou } from './SurveyThankYou';
 
-const FormContainer = styled.form({
+const FormContainer = styled.form(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  gap: '16px',
-  fontFamily: uiFontFamily,
-});
+  gap: '20px',
+  fontFamily: theme.typography.fonts.base,
+}));
 
 const FooterActions = styled.div({
   display: 'flex',
@@ -27,41 +30,11 @@ const FooterActions = styled.div({
   },
 });
 
-const CenteredActions = styled.div({
-  display: 'flex',
-  justifyContent: 'center',
-  gap: '12px',
-  marginTop: '24px',
-});
-
 const SubmissionError = styled.p(({ theme }) => ({
   margin: 0,
-  fontSize: '11px',
-  color: theme.color.negative,
+  fontSize: theme.typography.size.s1,
+  color: theme.fgColor.negative,
   textAlign: 'center',
-}));
-
-const ThankYouContainer = styled.div(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '32px 16px',
-  textAlign: 'center',
-  color: theme.textColor,
-}));
-
-const ThankYouTitle = styled.h3(({ theme }) => ({
-  fontSize: '18px',
-  fontWeight: '700',
-  margin: '0 0 8px 0',
-  color: theme.textColor,
-}));
-
-const ThankYouText = styled.p(({ theme }) => ({
-  fontSize: '13px',
-  margin: 0,
-  ...mutedTextStyles(theme),
 }));
 
 interface SurveyFormProps {
@@ -105,9 +78,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
 
   const handleCheckboxChange = (fieldId: string, option: string, checked: boolean) => {
     const current = (values[fieldId] as string[]) || [];
-    const next = checked
-      ? [...current, option]
-      : current.filter((item) => item !== option);
+    const next = checked ? [...current, option] : current.filter((item) => item !== option);
 
     handleFieldChange(fieldId, next);
   };
@@ -119,11 +90,12 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
       return;
     }
 
-    const targetId = question.type === 'rating'
-      ? `${question.id}-1`
-      : (question.type === 'radio' || question.type === 'checkbox')
-        ? `${question.id}-0`
-        : question.id;
+    const targetId =
+      question.type === 'rating'
+        ? `${question.id}-1`
+        : question.type === 'radio' || question.type === 'checkbox'
+          ? `${question.id}-0`
+          : question.id;
 
     requestAnimationFrame(() => {
       document.getElementById(targetId)?.focus();
@@ -226,6 +198,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
               onChange={(option) => handleFieldChange(question.id, option)}
               ariaDescribedBy={describedBy}
               ariaInvalid={invalid}
+              direction={question.direction}
             />
           )}
         </Fieldset>
@@ -243,6 +216,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
               onChange={(option, checked) => handleCheckboxChange(question.id, option, checked)}
               ariaDescribedBy={describedBy}
               ariaInvalid={invalid}
+              direction={question.direction}
             />
           )}
         </Fieldset>
@@ -285,15 +259,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
   };
 
   if (isSubmitted) {
-    return (
-      <ThankYouContainer role="status" aria-live="polite">
-        <ThankYouTitle>Thank you!</ThankYouTitle>
-        <ThankYouText>Your feedback has been successfully submitted.</ThankYouText>
-        <CenteredActions>
-          <Button onClick={onClose}>Close</Button>
-        </CenteredActions>
-      </ThankYouContainer>
-    );
+    return <SurveyThankYou onClose={onClose} />;
   }
 
   const errorSummaryItems = config.questions

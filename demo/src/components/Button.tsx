@@ -17,5 +17,9 @@ export const Button: React.FC<ButtonProps> = ({ label, primary = false, onClick 
     cursor: 'pointer',
     fontFamily: 'sans-serif',
   };
-  return <button style={style} onClick={onClick}>{label}</button>;
+  return (
+    <button style={style} onClick={onClick}>
+      {label}
+    </button>
+  );
 };

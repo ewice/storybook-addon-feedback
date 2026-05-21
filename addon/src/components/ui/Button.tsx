@@ -1,66 +1,66 @@
-import React from 'react';
+import { ComponentProps } from 'react';
 import { styled } from 'storybook/theming';
 import { focusRing } from './styles';
 
 type ButtonVariant = 'primary' | 'secondary' | 'dangerSubtle';
 
-const StyledButton = styled.button<{ $variant: ButtonVariant; disabled?: boolean }>(({ theme, $variant, disabled }) => {
-  const baseStyles = {
-    padding: '8px 16px',
-    minHeight: '36px',
-    minWidth: '36px',
-    fontSize: '13px',
-    fontWeight: '700',
-    borderRadius: '4px',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    transition: 'background-color 0.2s, border-color 0.2s, color 0.2s',
-    '&:focus-visible': focusRing(theme),
-  };
+const StyledButton = styled.button<{ $variant: ButtonVariant; disabled?: boolean }>(
+  ({ theme, $variant, disabled }) => {
+    const baseStyles = {
+      padding: '8px 16px',
+      minHeight: '36px',
+      minWidth: '36px',
+      fontSize: theme.typography.size.s2,
+      fontWeight: theme.typography.weight.bold,
+      borderRadius: theme.appBorderRadius,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      transition: 'background-color 0.2s, border-color 0.2s, color 0.2s',
+      '&:focus-visible': focusRing(theme),
+    };
 
-  if ($variant === 'secondary') {
+    if ($variant === 'secondary') {
+      return {
+        ...baseStyles,
+        border: `1px solid ${theme.borderColor.default}`,
+        backgroundColor: theme.bgColor.default,
+        color: theme.fgColor.default,
+        '&:hover': disabled
+          ? undefined
+          : {
+              backgroundColor: theme.background.hoverable,
+            },
+      };
+    }
+
+    if ($variant === 'dangerSubtle') {
+      return {
+        ...baseStyles,
+        border: `1px solid ${theme.borderColor.negative}`,
+        backgroundColor: 'transparent',
+        color: theme.fgColor.negative,
+        '&:hover': disabled
+          ? undefined
+          : {
+              backgroundColor: theme.bgColor.negative,
+            },
+      };
+    }
+
     return {
       ...baseStyles,
-      border: `1px solid ${theme.appBorderColor}`,
-      backgroundColor: theme.background.content,
-      color: theme.textColor,
+      border: 'none',
+      backgroundColor: disabled ? theme.borderColor.default : theme.color.secondary,
+      color: theme.fgColor.inverse,
       '&:hover': disabled
         ? undefined
         : {
-            backgroundColor: theme.background.app,
+            filter: theme.base === 'dark' ? 'brightness(1.12)' : 'brightness(0.92)',
           },
     };
   }
+);
 
-  if ($variant === 'dangerSubtle') {
-    return {
-      ...baseStyles,
-      border: `1px solid ${theme.color.negative}`,
-      backgroundColor: 'transparent',
-      color: theme.color.negative,
-      '&:hover': disabled
-        ? undefined
-        : {
-            backgroundColor: theme.base === 'dark'
-              ? `color-mix(in srgb, ${theme.color.negative} 14%, transparent)`
-              : `color-mix(in srgb, ${theme.color.negative} 8%, transparent)`,
-          },
-    };
-  }
-
-  return {
-    ...baseStyles,
-    border: 'none',
-    backgroundColor: disabled ? theme.appBorderColor : theme.color.secondary,
-    color: theme.textInverseColor,
-    '&:hover': disabled
-      ? undefined
-      : {
-          backgroundColor: theme.color.secondaryHot || theme.color.secondary,
-        },
-  };
-});
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ComponentProps<'button'> {
   variant?: ButtonVariant;
 }
 
@@ -68,6 +68,4 @@ export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   type = 'button',
   ...props
-}) => (
-  <StyledButton type={type} $variant={variant} {...props} />
-);
+}) => <StyledButton type={type} $variant={variant} {...props} />;

@@ -2,9 +2,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: [
-    'storybook-feedback-survey'
-  ],
+  addons: ['storybook-feedback-survey'],
   framework: {
     name: '@storybook/react-vite',
     options: {},

@@ -7,6 +7,7 @@ export interface SurveyField {
   required?: boolean;
   options?: string[]; // For radio and checkbox
   placeholder?: string; // For text and textarea
+  direction?: 'row' | 'column'; // Visual orientation for radio/checkbox groups
 }
 
 export interface SurveyTrigger {

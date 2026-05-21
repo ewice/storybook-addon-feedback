@@ -1,36 +1,39 @@
-import React from 'react';
+import { FC } from 'react';
 import { ChoiceGroup, ChoiceInput, ChoiceRow } from '../ui/Choice';
 
 interface CheckboxGroupInputProps {
+  ariaDescribedBy?: string;
+  ariaInvalid?: boolean;
+  direction?: 'row' | 'column';
   name: string;
   options: string[];
   values: string[];
   onChange: (option: string, checked: boolean) => void;
-  ariaDescribedBy?: string;
-  ariaInvalid?: boolean;
 }
 
-export const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
+export const CheckboxGroupInput: FC<CheckboxGroupInputProps> = ({
+  ariaDescribedBy,
+  ariaInvalid,
+  direction,
   name,
   options,
   values = [],
   onChange,
-  ariaDescribedBy,
-  ariaInvalid,
 }) => {
   return (
-    <ChoiceGroup>
+    <ChoiceGroup direction={direction}>
       {options.map((option, index) => {
         const isChecked = values.includes(option);
+
         return (
           <ChoiceRow key={option} htmlFor={`${name}-${index}`}>
             <ChoiceInput
-              id={`${name}-${index}`}
-              type="checkbox"
-              checked={isChecked}
-              onChange={(e) => onChange(option, e.target.checked)}
               aria-describedby={ariaDescribedBy}
               aria-invalid={ariaInvalid || undefined}
+              checked={isChecked}
+              id={`${name}-${index}`}
+              type="checkbox"
+              onChange={(e) => onChange(option, e.target.checked)}
             />
             {option}
           </ChoiceRow>

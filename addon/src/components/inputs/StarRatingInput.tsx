@@ -1,3 +1,4 @@
+import { StarIcon } from '@storybook/icons';
 import React, { useState } from 'react';
 import { styled } from 'storybook/theming';
 import { focusRing } from '../ui/styles';
@@ -5,7 +6,6 @@ import { focusRing } from '../ui/styles';
 const StarsContainer = styled.div({
   display: 'flex',
   alignItems: 'center',
-  gap: '6px',
   padding: '4px 0',
 });
 
@@ -21,28 +21,28 @@ const VisuallyHiddenInput = styled.input({
   border: 0,
 });
 
-const StarOption = styled.label<{ active: boolean; hoverActive: boolean }>(({ theme, active, hoverActive }) => ({
-  position: 'relative',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minWidth: '44px',
-  minHeight: '44px',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  padding: 0,
-  color: hoverActive || active ? theme.barSelectedColor : theme.appBorderColor,
-  transition: 'transform 0.1s, color 0.1s, box-shadow 0.2s',
-  '&:hover': {
-    transform: 'scale(1.15)',
-  },
-  '&:focus-within': focusRing(theme),
-}));
-
-const StarIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-  </svg>
+const StarOption = styled.label<{ active: boolean; hoverActive: boolean }>(
+  ({ theme, active, hoverActive }) => {
+    return {
+      alignItems: 'center',
+      borderRadius: theme.appBorderRadius,
+      color: hoverActive || active ? theme.color.gold : theme.borderColor.default,
+      cursor: 'pointer',
+      display: 'inline-flex',
+      height: '44px',
+      justifyContent: 'center',
+      padding: 0,
+      position: 'relative',
+      width: '44px',
+      transition:
+        'transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.1s, background-color 0.15s',
+      '&:hover': {
+        transform: 'scale(1.15)',
+        backgroundColor: theme.background.hoverable,
+      },
+      '&:has(input:focus-visible)': focusRing(theme),
+    };
+  }
 );
 
 interface StarRatingInputProps {
