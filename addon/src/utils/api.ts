@@ -20,7 +20,7 @@ export const submitFeedbackWebhook = async (
   const payload: FeedbackPayload = {
     surveyId: config.surveyId,
     timestamp: new Date().toISOString(),
-    responses,
+    responses
   };
 
   if (!config.webhookUrl) {
@@ -30,14 +30,14 @@ export const submitFeedbackWebhook = async (
   // Inject custom headers if provided, ensuring content-type is json
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(config.webhookHeaders || {}),
+    ...(config.webhookHeaders || {})
   };
 
   try {
     const res = await fetch(config.webhookUrl, {
       method: 'POST',
       headers,
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
     if (!res.ok) {

@@ -7,7 +7,7 @@ async function managerWebpack(config, options) {
     const webpack = require('webpack');
     config.plugins.push(
       new webpack.DefinePlugin({
-        STORYBOOK_FEEDBACK_SURVEY_OPTIONS: JSON.stringify(options || {}),
+        STORYBOOK_FEEDBACK_SURVEY_OPTIONS: JSON.stringify(options || {})
       })
     );
   } catch (err) {
@@ -19,7 +19,7 @@ async function managerWebpack(config, options) {
 async function viteFinal(config, options) {
   config.define = {
     ...config.define,
-    STORYBOOK_FEEDBACK_SURVEY_OPTIONS: JSON.stringify(options || {}),
+    STORYBOOK_FEEDBACK_SURVEY_OPTIONS: JSON.stringify(options || {})
   };
   return config;
 }
@@ -27,5 +27,5 @@ async function viteFinal(config, options) {
 module.exports = {
   managerEntries,
   managerWebpack,
-  viteFinal,
+  viteFinal
 };

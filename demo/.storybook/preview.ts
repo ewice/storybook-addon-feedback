@@ -5,8 +5,8 @@ const preview: Preview = {
     controls: {
       matchers: {
         color: /(background|color)$/i,
-        date: /Date$/i,
-      },
+        date: /Date$/i
+      }
     },
     feedbackSurvey: {
       surveyId: 'doc-feedback-survey-v1',
@@ -19,14 +19,14 @@ const preview: Preview = {
         'https://httpbin.org/post', // Fallback for local testing
       trigger: {
         delayMs: 5000, // Pop up after 5 seconds
-        storyCount: 3, // Or after visiting 3 stories
+        storyCount: 3 // Or after visiting 3 stories
       },
       questions: [
         {
           id: 'rating',
           type: 'rating',
           label: 'How would you rate the clarity of our component docs?',
-          required: true,
+          required: true
         },
         {
           id: 'clarity-radio',
@@ -34,23 +34,23 @@ const preview: Preview = {
           label: 'Was it easy to find what you were looking for?',
           options: ['Very Easy', 'Somewhat Easy', 'Difficult'],
           required: true,
-          direction: 'row',
+          direction: 'row'
         },
         {
           id: 'missing-content',
           type: 'checkbox',
           label: 'What topics would you like to see more of? (Select all that apply)',
-          options: ['Code Examples', 'Accessibility Guides', 'Design Specs', 'Best Practices'],
+          options: ['Code Examples', 'Accessibility Guides', 'Design Specs', 'Best Practices']
         },
         {
           id: 'additional-feedback',
           type: 'textarea',
           label: 'Any other comments or suggestions?',
-          required: false,
-        },
-      ],
-    },
-  },
+          required: false
+        }
+      ]
+    }
+  }
 };
 
 export default preview;

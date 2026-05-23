@@ -17,7 +17,7 @@ const FormContainer = styled.form(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: '20px',
-  fontFamily: theme.typography.fonts.base,
+  fontFamily: theme.typography.fonts.base
 }));
 
 const FooterActions = styled.div({
@@ -26,15 +26,15 @@ const FooterActions = styled.div({
   gap: '12px',
   marginTop: '8px',
   '& > *:first-of-type': {
-    marginRight: 'auto',
-  },
+    marginRight: 'auto'
+  }
 });
 
 const SubmissionError = styled.p(({ theme }) => ({
   margin: 0,
   fontSize: theme.typography.size.s1,
   color: theme.fgColor.negative,
-  textAlign: 'center',
+  textAlign: 'center'
 }));
 
 interface SurveyFormProps {
@@ -50,13 +50,13 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
   isCompleted,
   onSubmit,
   onClose,
-  onSkipPermanent,
+  onSkipPermanent
 }) => {
   const storage = useSurveyStorage(config.surveyId);
   const [values, setValues] = useState<Record<string, any>>(() => storage.getDraft());
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(() => !!isCompleted);
+  const [isSubmitted, setIsSubmitted] = useState(() => isCompleted);
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -168,7 +168,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
       id: question.id,
       label: question.label,
       required: question.required,
-      error,
+      error
     };
 
     if (question.type === 'rating') {
@@ -267,7 +267,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
     .map((question) => ({
       id: question.id,
       label: question.label,
-      message: errors[question.id],
+      message: errors[question.id]
     }));
 
   return (

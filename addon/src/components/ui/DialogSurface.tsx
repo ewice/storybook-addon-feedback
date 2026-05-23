@@ -23,20 +23,20 @@ const DialogRoot = styled.dialog(({ theme }) => ({
   '@keyframes sbSurveyFadeIn': {
     from: {
       opacity: 0,
-      transform: 'translateY(12px) scale(0.97)',
+      transform: 'translateY(12px) scale(0.97)'
     },
     to: {
       opacity: 1,
-      transform: 'translateY(0) scale(1)',
-    },
+      transform: 'translateY(0) scale(1)'
+    }
   },
   '@media (prefers-reduced-motion: reduce)': {
-    animation: 'none',
+    animation: 'none'
   },
   '&::backdrop': {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    backdropFilter: 'blur(3px)',
-  },
+    backdropFilter: 'blur(3px)'
+  }
 }));
 
 interface DialogSurfaceProps {
@@ -52,7 +52,7 @@ export const DialogSurface: React.FC<DialogSurfaceProps> = ({
   title,
   description,
   onClose,
-  children,
+  children
 }) => {
   const dialogRef = React.useRef<HTMLDialogElement>(null);
   const titleId = React.useId();

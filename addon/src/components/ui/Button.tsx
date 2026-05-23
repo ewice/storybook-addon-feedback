@@ -15,7 +15,7 @@ const StyledButton = styled.button<{ $variant: ButtonVariant; disabled?: boolean
       borderRadius: theme.appBorderRadius,
       cursor: disabled ? 'not-allowed' : 'pointer',
       transition: 'background-color 0.2s, border-color 0.2s, color 0.2s',
-      '&:focus-visible': focusRing(theme),
+      '&:focus-visible': focusRing(theme)
     };
 
     if ($variant === 'secondary') {
@@ -27,8 +27,8 @@ const StyledButton = styled.button<{ $variant: ButtonVariant; disabled?: boolean
         '&:hover': disabled
           ? undefined
           : {
-              backgroundColor: theme.background.hoverable,
-            },
+              backgroundColor: theme.background.hoverable
+            }
       };
     }
 
@@ -41,8 +41,8 @@ const StyledButton = styled.button<{ $variant: ButtonVariant; disabled?: boolean
         '&:hover': disabled
           ? undefined
           : {
-              backgroundColor: theme.bgColor.negative,
-            },
+              backgroundColor: theme.bgColor.negative
+            }
       };
     }
 
@@ -54,8 +54,8 @@ const StyledButton = styled.button<{ $variant: ButtonVariant; disabled?: boolean
       '&:hover': disabled
         ? undefined
         : {
-            filter: theme.base === 'dark' ? 'brightness(1.12)' : 'brightness(0.92)',
-          },
+            filter: theme.base === 'dark' ? 'brightness(1.12)' : 'brightness(0.92)'
+          }
     };
   }
 );

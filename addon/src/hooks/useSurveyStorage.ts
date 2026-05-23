@@ -37,7 +37,7 @@ const safeStorage = {
     } catch {
       // Graceful fallback if storage is blocked
     }
-  },
+  }
 };
 
 export const useSurveyStorage = (surveyId: string) => {
@@ -61,7 +61,7 @@ export const useSurveyStorage = (surveyId: string) => {
       isSkippedPermanently,
       dismissedAt,
       impressionCount,
-      isSessionDismissed,
+      isSessionDismissed
     };
   });
 
@@ -79,14 +79,14 @@ export const useSurveyStorage = (surveyId: string) => {
       isSkippedPermanently,
       dismissedAt,
       impressionCount,
-      isSessionDismissed,
+      isSessionDismissed
     });
   }, [
     completedKey,
     skippedPermanentlyKey,
     dismissedAtKey,
     impressionCountKey,
-    sessionDismissedKey,
+    sessionDismissedKey
   ]);
 
   const setCompleted = useCallback(() => {
@@ -145,6 +145,6 @@ export const useSurveyStorage = (surveyId: string) => {
     incrementImpressions,
     getDraft,
     saveDraft,
-    clearDraft,
+    clearDraft
   };
 };

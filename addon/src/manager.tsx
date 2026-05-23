@@ -10,6 +10,6 @@ addons.register(ADDON_ID, (api) => {
     title: 'Feedback Survey',
     type: types.TOOL,
     match: ({ viewMode }) => viewMode === 'story',
-    render: () => <SurveyManager api={api} />,
+    render: () => <SurveyManager api={api} />
   });
 });

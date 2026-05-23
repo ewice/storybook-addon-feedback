@@ -5,7 +5,7 @@ import { fieldTextStyles } from './styles';
 const FieldContainer = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  gap: '6px',
+  gap: '6px'
 });
 
 const Label = styled.label(({ theme }) => ({
@@ -13,11 +13,11 @@ const Label = styled.label(({ theme }) => ({
   fontWeight: theme.typography?.weight?.bold || '700',
   display: 'flex',
   alignItems: 'center',
-  gap: '4px',
+  gap: '4px'
 }));
 
 export const RequiredAsterisk = styled.span(({ theme }) => ({
-  color: theme.fgColor?.negative || theme.color?.negative || '#FF4400',
+  color: theme.fgColor?.negative || theme.color?.negative || '#FF4400'
 }));
 
 export const VisuallyHidden = styled.span({
@@ -29,13 +29,13 @@ export const VisuallyHidden = styled.span({
   overflow: 'hidden',
   clip: 'rect(0, 0, 0, 0)',
   whiteSpace: 'nowrap',
-  border: 0,
+  border: 0
 });
 
 export const ErrorText = styled.p(({ theme }) => ({
   fontSize: theme.typography?.size?.s1 ? `${theme.typography.size.s1}px` : '11px',
   color: theme.fgColor?.negative || theme.color?.negative || '#FF4400',
-  margin: '2px 0 0 0',
+  margin: '2px 0 0 0'
 }));
 
 export interface FieldRenderProps {
@@ -53,7 +53,7 @@ export interface CommonFieldProps {
 
 export const LabelContent: React.FC<{ label: string; required?: boolean }> = ({
   label,
-  required,
+  required
 }) => (
   <>
     {label}

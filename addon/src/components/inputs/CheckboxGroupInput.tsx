@@ -18,7 +18,7 @@ export const CheckboxGroupInput: FC<CheckboxGroupInputProps> = ({
   name,
   options,
   values = [],
-  onChange,
+  onChange
 }) => {
   return (
     <ChoiceGroup direction={direction}>

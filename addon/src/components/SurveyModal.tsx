@@ -18,7 +18,7 @@ export const SurveyModal: React.FC<SurveyModalProps> = ({
   isCompleted,
   onSubmit,
   onClose,
-  onSkipPermanent,
+  onSkipPermanent
 }) => (
   <DialogSurface
     isOpen={isOpen}

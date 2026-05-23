@@ -6,7 +6,7 @@ import { focusRing } from '../ui/styles';
 const StarsContainer = styled.div({
   display: 'flex',
   alignItems: 'center',
-  padding: '4px 0',
+  padding: '4px 0'
 });
 
 const VisuallyHiddenInput = styled.input({
@@ -18,7 +18,7 @@ const VisuallyHiddenInput = styled.input({
   overflow: 'hidden',
   clip: 'rect(0, 0, 0, 0)',
   whiteSpace: 'nowrap',
-  border: 0,
+  border: 0
 });
 
 const StarOption = styled.label<{ active: boolean; hoverActive: boolean }>(
@@ -38,9 +38,9 @@ const StarOption = styled.label<{ active: boolean; hoverActive: boolean }>(
         'transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.1s, background-color 0.15s',
       '&:hover': {
         transform: 'scale(1.15)',
-        backgroundColor: theme.background.hoverable,
+        backgroundColor: theme.background.hoverable
       },
-      '&:has(input:focus-visible)': focusRing(theme),
+      '&:has(input:focus-visible)': focusRing(theme)
     };
   }
 );
@@ -58,7 +58,7 @@ export const StarRatingInput: React.FC<StarRatingInputProps> = ({
   value,
   onChange,
   ariaDescribedBy,
-  ariaInvalid,
+  ariaInvalid
 }) => {
   const [hoverRating, setHoverRating] = useState(0);
 

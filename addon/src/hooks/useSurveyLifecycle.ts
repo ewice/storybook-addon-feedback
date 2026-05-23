@@ -20,7 +20,7 @@ export const useSurveyLifecycle = ({
   impressionCount,
   incrementImpressions,
   api,
-  isSessionDismissed,
+  isSessionDismissed
 }: SurveyLifecycleProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [navCount, setNavCount] = useState(0);
@@ -79,7 +79,7 @@ export const useSurveyLifecycle = ({
     config.questions,
     triggerOptions.delayMs,
     isOpen,
-    incrementImpressions,
+    incrementImpressions
   ]);
 
   // 3. Handle Story Navigation Count Trigger
@@ -122,6 +122,6 @@ export const useSurveyLifecycle = ({
     isOpen,
     setIsOpen,
     shouldBlockAutoPopup,
-    navCount,
+    navCount
   };
 };

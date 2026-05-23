@@ -7,7 +7,7 @@ export const ChoiceGroup = styled.div<{ direction?: 'row' | 'column' }>(
     flexDirection: direction,
     flexWrap: direction === 'row' ? 'wrap' : 'nowrap',
     gap: direction === 'row' ? '12px 16px' : '8px',
-    padding: '4px 0',
+    padding: '4px 0'
   })
 );
 
@@ -24,12 +24,12 @@ export const ChoiceRow = styled.label(({ theme }) => ({
   userSelect: 'none',
   transition: 'background-color 0.2s',
   '&:hover': {
-    backgroundColor: theme.background.hoverable,
+    backgroundColor: theme.background.hoverable
   },
-  '&:has(input:focus-visible)': focusRing(theme),
+  '&:has(input:focus-visible)': focusRing(theme)
 }));
 
 export const ChoiceInput = styled.input(({ theme }) => ({
   cursor: 'pointer',
-  accentColor: theme.barSelectedColor,
+  accentColor: theme.barSelectedColor
 }));

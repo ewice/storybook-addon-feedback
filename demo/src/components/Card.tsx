@@ -13,7 +13,7 @@ export const Card: React.FC<CardProps> = ({ title, content }) => {
     backgroundColor: '#ffffff',
     fontFamily: 'sans-serif',
     maxWidth: '300px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
   };
   return (
     <div style={style}>

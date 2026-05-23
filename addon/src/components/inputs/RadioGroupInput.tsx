@@ -18,7 +18,7 @@ export const RadioGroupInput: React.FC<RadioGroupInputProps> = ({
   name,
   options,
   value,
-  onChange,
+  onChange
 }) => {
   return (
     <ChoiceGroup direction={direction}>

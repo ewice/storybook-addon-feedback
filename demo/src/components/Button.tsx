@@ -1,4 +1,4 @@
-import React from 'react';
+import {type CSSProperties, type FC } from 'react';
 
 export interface ButtonProps {
   label: string;
@@ -6,8 +6,8 @@ export interface ButtonProps {
   onClick?: () => void;
 }
 
-export const Button: React.FC<ButtonProps> = ({ label, primary = false, onClick }) => {
-  const style: React.CSSProperties = {
+export const Button: FC<ButtonProps> = ({ label, primary = false, onClick }) => {
+  const style: CSSProperties = {
     padding: '8px 16px',
     borderRadius: '4px',
     border: 'none',
@@ -15,7 +15,7 @@ export const Button: React.FC<ButtonProps> = ({ label, primary = false, onClick 
     color: primary ? '#ffffff' : '#1e293b',
     fontWeight: '600',
     cursor: 'pointer',
-    fontFamily: 'sans-serif',
+    fontFamily: 'sans-serif'
   };
   return (
     <button style={style} onClick={onClick}>
