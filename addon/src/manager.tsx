@@ -1,6 +1,6 @@
 import React from 'react';
 import { addons, types } from 'storybook/manager-api';
-import { SurveyManager } from './components/SurveyManager';
+import { FeedbackAddon } from './containers/FeedbackAddon';
 
 const ADDON_ID = 'storybook-feedback-survey';
 const TOOL_ID = `${ADDON_ID}/tool`;
@@ -10,6 +10,6 @@ addons.register(ADDON_ID, (api) => {
     title: 'Feedback Survey',
     type: types.TOOL,
     match: ({ viewMode }) => viewMode === 'story',
-    render: () => <SurveyManager api={api} />
+    render: () => <FeedbackAddon api={api} />
   });
 });

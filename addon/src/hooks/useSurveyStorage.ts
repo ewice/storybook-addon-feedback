@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { SurveyResponses } from '../types';
 
 export interface SurveyStorageState {
   isCompleted: boolean;
@@ -89,6 +90,22 @@ export const useSurveyStorage = (surveyId: string) => {
     sessionDismissedKey
   ]);
 
+  // Synchronize state across browser tabs/windows
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === completedKey) {
+        setState((prev) => ({ ...prev, isCompleted: e.newValue === 'true' }));
+      }
+      if (e.key === skippedPermanentlyKey) {
+        setState((prev) => ({ ...prev, isSkippedPermanently: e.newValue === 'true' }));
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [completedKey, skippedPermanentlyKey]);
+
   const setCompleted = useCallback(() => {
     safeStorage.setItem(completedKey, 'true');
     setState((prev) => ({ ...prev, isCompleted: true }));
@@ -116,7 +133,7 @@ export const useSurveyStorage = (surveyId: string) => {
     return nextCount;
   }, [impressionCountKey]);
 
-  const getDraft = useCallback((): Record<string, any> => {
+  const getDraft = useCallback((): SurveyResponses => {
     const draft = safeStorage.getItem(draftKey, true);
     if (!draft) return {};
     try {
@@ -127,7 +144,7 @@ export const useSurveyStorage = (surveyId: string) => {
   }, [draftKey]);
 
   const saveDraft = useCallback(
-    (values: Record<string, any>) => {
+    (values: SurveyResponses) => {
       safeStorage.setItem(draftKey, JSON.stringify(values), true);
     },
     [draftKey]

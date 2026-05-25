@@ -28,3 +28,8 @@ export interface SurveyConfig {
   trigger?: SurveyTrigger;
   enabled?: boolean; // Global survey toggle
 }
+
+export type SurveyResponseValue = string | number | string[];
+
+export type SurveyResponses = Record<string, SurveyResponseValue>;
+

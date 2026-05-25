@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { API } from 'storybook/manager-api';
 import { SurveyConfig } from '../types';
+
+const DEFAULT_DELAY_MS = 5000;
+const DEFAULT_STORY_COUNT = 3;
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export interface SurveyLifecycleProps {
   config: SurveyConfig;
@@ -8,7 +13,7 @@ export interface SurveyLifecycleProps {
   dismissedAt: number | null;
   impressionCount: number;
   incrementImpressions: () => number;
-  api: any; // Storybook Channel API
+  api: API;
   isSessionDismissed: boolean;
 }
 
@@ -24,7 +29,7 @@ export const useSurveyLifecycle = ({
 }: SurveyLifecycleProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [navCount, setNavCount] = useState(0);
-  const timerRef = useRef<any>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const triggerOptions = config.trigger || {};
 
@@ -38,7 +43,7 @@ export const useSurveyLifecycle = ({
 
   let isSnoozed = false;
   if (dismissedAt && triggerOptions.coolDownDays) {
-    const coolDownMs = triggerOptions.coolDownDays * 24 * 60 * 60 * 1000;
+    const coolDownMs = triggerOptions.coolDownDays * MS_PER_DAY;
     const timeSinceDismissal = Date.now() - dismissedAt;
     if (timeSinceDismissal < coolDownMs) {
       isSnoozed = true;
@@ -60,7 +65,7 @@ export const useSurveyLifecycle = ({
       return;
     }
 
-    const delay = triggerOptions.delayMs !== undefined ? triggerOptions.delayMs : 5000;
+    const delay = triggerOptions.delayMs !== undefined ? triggerOptions.delayMs : DEFAULT_DELAY_MS;
 
     if (delay > 0) {
       timerRef.current = setTimeout(() => {
@@ -88,7 +93,7 @@ export const useSurveyLifecycle = ({
       setNavCount((prev) => {
         const nextCount = prev + 1;
         const requiredNavs =
-          triggerOptions.storyCount !== undefined ? triggerOptions.storyCount : 3;
+          triggerOptions.storyCount !== undefined ? triggerOptions.storyCount : DEFAULT_STORY_COUNT;
 
         if (!shouldBlockAutoPopup && !isOpen && requiredNavs > 0 && nextCount >= requiredNavs) {
           incrementImpressions();

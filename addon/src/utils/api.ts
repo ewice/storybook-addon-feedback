@@ -1,9 +1,9 @@
-import { SurveyConfig } from '../types';
+import { SurveyConfig, SurveyResponses } from '../types';
 
 export interface FeedbackPayload {
   surveyId: string;
   timestamp: string;
-  responses: Record<string, any>;
+  responses: SurveyResponses;
 }
 
 /**
@@ -15,7 +15,7 @@ export interface FeedbackPayload {
  */
 export const submitFeedbackWebhook = async (
   config: SurveyConfig,
-  responses: Record<string, any>
+  responses: SurveyResponses
 ): Promise<FeedbackPayload> => {
   const payload: FeedbackPayload = {
     surveyId: config.surveyId,

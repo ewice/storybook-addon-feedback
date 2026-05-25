@@ -1,13 +1,13 @@
 import React from 'react';
-import { SurveyConfig } from '../types';
+import { SurveyConfig, SurveyResponses } from '../types';
 import { SurveyForm } from './SurveyForm';
-import { DialogSurface } from './ui/DialogSurface';
+import { DialogSurface } from '../ui';
 
 interface SurveyModalProps {
   isOpen: boolean;
   config: SurveyConfig;
   isCompleted: boolean;
-  onSubmit: (data: Record<string, any>) => Promise<void>;
+  onSubmit: (data: SurveyResponses) => Promise<void>;
   onClose: () => void;
   onSkipPermanent: () => void;
 }
