@@ -1,4 +1,4 @@
-import {type CSSProperties, type FC } from 'react';
+import { type CSSProperties, type FC } from 'react';
 
 export interface ButtonProps {
   label: string;
