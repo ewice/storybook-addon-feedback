@@ -31,5 +31,8 @@ export const Choice = styled.label(({ theme }) => ({
 
 export const ChoiceInput = styled.input(({ theme }) => ({
   cursor: 'pointer',
-  accentColor: theme.barSelectedColor
+  accentColor: theme.barSelectedColor,
+  '&:focus-visible': {
+    outline: 'none'
+  }
 }));
