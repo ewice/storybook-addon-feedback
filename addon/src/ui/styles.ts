@@ -19,7 +19,7 @@ export const fieldTextStyles = (theme: Theme) => ({
 
 export const inputBaseStyles = (theme: Theme) => ({
   backgroundColor: theme.input.background,
-  border: `${theme.input.border} solid ${theme.borderColor.default}`,
+  border: `1px solid ${theme.input.border}`,
   borderRadius: theme.input.borderRadius,
   color: theme.input.color,
   fontSize: theme.typography.size.s2,

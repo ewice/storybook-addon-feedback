@@ -32,4 +32,3 @@ export interface SurveyConfig {
 export type SurveyResponseValue = string | number | string[];
 
 export type SurveyResponses = Record<string, SurveyResponseValue>;
-

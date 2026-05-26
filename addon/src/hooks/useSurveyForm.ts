@@ -94,26 +94,29 @@ export const useSurveyForm = ({ config, isCompleted, onSubmit }: UseSurveyFormPr
     return Object.keys(nextErrors).length === 0;
   }, [config.questions, values, focusQuestion]);
 
-  const handleSubmit = useCallback(async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
 
-    if (!validate()) {
-      return;
-    }
+      if (!validate()) {
+        return;
+      }
 
-    setIsSubmitting(true);
+      setIsSubmitting(true);
 
-    try {
-      await onSubmit(values);
-      storage.clearDraft();
-      setIsSubmitted(true);
-    } catch (error) {
-      console.error('Failed to submit survey:', error);
-      setErrors((prev) => ({ ...prev, submit: 'Failed to submit feedback. Please try again.' }));
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [validate, onSubmit, values, storage]);
+      try {
+        await onSubmit(values);
+        storage.clearDraft();
+        setIsSubmitted(true);
+      } catch (error) {
+        console.error('Failed to submit survey:', error);
+        setErrors((prev) => ({ ...prev, submit: 'Failed to submit feedback. Please try again.' }));
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [validate, onSubmit, values, storage]
+  );
 
   return {
     values,

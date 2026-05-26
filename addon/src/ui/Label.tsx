@@ -7,10 +7,7 @@ export const RequiredAsterisk = styled.span(({ theme }) => ({
   color: theme.fgColor.negative
 }));
 
-export const LabelContent: FC<{ label: string; required?: boolean }> = ({
-  label,
-  required
-}) => (
+export const LabelContent: FC<{ label: string; required?: boolean }> = ({ label, required }) => (
   <>
     {label}
     {required && (

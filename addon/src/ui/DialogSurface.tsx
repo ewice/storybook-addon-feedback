@@ -14,7 +14,7 @@ import { DialogBody } from './DialogBody';
 
 const DialogRoot = styled.dialog(({ theme }) => ({
   padding: 0,
-  border: `${theme.input.border} solid ${theme.borderColor.default}`,
+  border: `1px solid ${theme.borderColor.default}`,
   borderRadius: theme.appBorderRadius,
   backgroundColor: theme.bgColor.default,
   boxShadow: modalCardShadow(theme),
