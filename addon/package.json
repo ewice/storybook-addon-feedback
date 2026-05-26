@@ -9,8 +9,8 @@
     "preset.js"
   ],
   "scripts": {
-    "build": "tsup src/manager.tsx src/types.ts --format esm --clean --dts --external react,react-dom,storybook/manager-api,storybook/internal/components,storybook/theming,@storybook/icons",
-    "watch": "tsup src/manager.tsx src/types.ts --format esm --dts --watch --external react,react-dom,storybook/manager-api,storybook/internal/components,storybook/theming,@storybook/icons"
+    "build": "tsup src/manager.tsx src/types.ts --format esm --clean --dts --inject react-shim.js --external react,react-dom,storybook/manager-api,storybook/internal/components,storybook/theming,@storybook/icons",
+    "watch": "tsup src/manager.tsx src/types.ts --format esm --dts --watch --inject react-shim.js --external react,react-dom,storybook/manager-api,storybook/internal/components,storybook/theming,@storybook/icons"
   },
   "devDependencies": {
     "storybook": "^10.4.0",
