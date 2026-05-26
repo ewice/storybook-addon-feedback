@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { styled } from 'storybook/theming';
 import { fieldTextStyles } from './styles';
 import { CommonFieldProps } from './Field';
@@ -22,7 +22,7 @@ const Legend = styled.legend(({ theme }) => ({
   padding: 0
 }));
 
-export const Fieldset: React.FC<CommonFieldProps> = ({ id, label, required, error, children }) => {
+export const Fieldset: FC<CommonFieldProps> = ({ id, label, required, error, children }) => {
   const errorId = error ? `${id}-error` : undefined;
 
   return (

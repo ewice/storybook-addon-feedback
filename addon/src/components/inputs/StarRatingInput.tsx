@@ -1,5 +1,5 @@
 import { StarIcon } from '@storybook/icons';
-import React, { useState } from 'react';
+import { useState, Ref } from 'react';
 import { styled } from 'storybook/theming';
 import { focusRing } from '../../ui';
 
@@ -51,46 +51,50 @@ interface StarRatingInputProps {
   onChange: (rating: number) => void;
   ariaDescribedBy?: string;
   ariaInvalid?: boolean;
+  ref?: Ref<HTMLInputElement>;
 }
 
-export const StarRatingInput = React.forwardRef<HTMLInputElement, StarRatingInputProps>(
-  ({ name, value, onChange, ariaDescribedBy, ariaInvalid }, ref) => {
-    const [hoverRating, setHoverRating] = useState(0);
+export const StarRatingInput = ({
+  name,
+  value,
+  onChange,
+  ariaDescribedBy,
+  ariaInvalid,
+  ref
+}: StarRatingInputProps) => {
+  const [hoverRating, setHoverRating] = useState(0);
 
-    return (
-      <StarsContainer>
-        {[1, 2, 3, 4, 5].map((starValue) => {
-          const active = value >= starValue;
-          const hoverActive = hoverRating >= starValue;
-          return (
-            <StarOption
-              key={starValue}
-              active={active}
-              hoverActive={hoverActive}
-              onMouseEnter={() => setHoverRating(starValue)}
-              onMouseLeave={() => setHoverRating(0)}
-              onFocus={() => setHoverRating(starValue)}
-              onBlur={() => setHoverRating(0)}
-            >
-              <VisuallyHiddenInput
-                ref={starValue === 1 ? ref : undefined}
-                id={`${name}-${starValue}`}
-                type="radio"
-                name={name}
-                value={String(starValue)}
-                checked={value === starValue}
-                onChange={() => onChange(starValue)}
-                aria-label={`${starValue} out of 5 stars`}
-                aria-describedby={ariaDescribedBy}
-                aria-invalid={ariaInvalid || undefined}
-              />
-              <StarIcon />
-            </StarOption>
-          );
-        })}
-      </StarsContainer>
-    );
-  }
-);
-
-StarRatingInput.displayName = 'StarRatingInput';
+  return (
+    <StarsContainer>
+      {[1, 2, 3, 4, 5].map((starValue) => {
+        const active = value >= starValue;
+        const hoverActive = hoverRating >= starValue;
+        return (
+          <StarOption
+            key={starValue}
+            active={active}
+            hoverActive={hoverActive}
+            onMouseEnter={() => setHoverRating(starValue)}
+            onMouseLeave={() => setHoverRating(0)}
+            onFocus={() => setHoverRating(starValue)}
+            onBlur={() => setHoverRating(0)}
+          >
+            <VisuallyHiddenInput
+              ref={starValue === 1 ? ref : undefined}
+              id={`${name}-${starValue}`}
+              type="radio"
+              name={name}
+              value={String(starValue)}
+              checked={value === starValue}
+              onChange={() => onChange(starValue)}
+              aria-label={`${starValue} out of 5 stars`}
+              aria-describedby={ariaDescribedBy}
+              aria-invalid={ariaInvalid || undefined}
+            />
+            <StarIcon />
+          </StarOption>
+        );
+      })}
+    </StarsContainer>
+  );
+};

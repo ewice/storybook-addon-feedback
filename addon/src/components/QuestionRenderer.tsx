@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, MutableRefObject } from 'react';
 import { SurveyField, SurveyResponseValue } from '../types';
 import {
   CheckboxGroupInput,
@@ -15,10 +15,10 @@ interface QuestionRendererProps {
   error?: string;
   onChange: (fieldId: string, nextValue: SurveyResponseValue) => void;
   onCheckboxChange: (fieldId: string, option: string, checked: boolean) => void;
-  fieldRefs: React.MutableRefObject<Record<string, HTMLElement | null>>;
+  fieldRefs: MutableRefObject<Record<string, HTMLElement | null>>;
 }
 
-export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
+export const QuestionRenderer: FC<QuestionRendererProps> = ({
   question,
   value,
   error,

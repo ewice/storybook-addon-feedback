@@ -1,4 +1,4 @@
-import React from 'react';
+import { Ref } from 'react';
 import { styled } from 'storybook/theming';
 import { inputBaseStyles } from '../../ui';
 
@@ -15,24 +15,30 @@ interface TextInputFieldProps {
   ariaDescribedBy?: string;
   ariaInvalid?: boolean;
   required?: boolean;
+  ref?: Ref<HTMLInputElement>;
 }
 
-export const TextInputField = React.forwardRef<HTMLInputElement, TextInputFieldProps>(
-  ({ id, placeholder, value, onChange, ariaDescribedBy, ariaInvalid, required }, ref) => {
-    return (
-      <InputText
-        ref={ref}
-        aria-describedby={ariaDescribedBy}
-        aria-invalid={ariaInvalid || undefined}
-        id={id}
-        placeholder={placeholder}
-        required={required}
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    );
-  }
-);
-
-TextInputField.displayName = 'TextInputField';
+export const TextInputField = ({
+  id,
+  placeholder,
+  value,
+  onChange,
+  ariaDescribedBy,
+  ariaInvalid,
+  required,
+  ref
+}: TextInputFieldProps) => {
+  return (
+    <InputText
+      ref={ref}
+      aria-describedby={ariaDescribedBy}
+      aria-invalid={ariaInvalid || undefined}
+      id={id}
+      placeholder={placeholder}
+      required={required}
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  );
+};

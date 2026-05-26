@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { styled } from 'storybook/theming';
 import { SurveyConfig, SurveyResponses } from '../types';
 import { useSurveyForm } from '../hooks/useSurveyForm';
@@ -38,7 +38,7 @@ interface SurveyFormProps {
   onSkipPermanent: () => void;
 }
 
-export const SurveyForm: React.FC<SurveyFormProps> = ({
+export const SurveyForm: FC<SurveyFormProps> = ({
   config,
   isCompleted,
   onSubmit,

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, FormEvent } from 'react';
 import { useSurveyStorage } from './useSurveyStorage';
 import { SurveyConfig, SurveyResponses, SurveyResponseValue } from '../types';
 
@@ -95,7 +95,7 @@ export const useSurveyForm = ({ config, isCompleted, onSubmit }: UseSurveyFormPr
   }, [config.questions, values, focusQuestion]);
 
   const handleSubmit = useCallback(
-    async (event: React.FormEvent) => {
+    async (event: FormEvent) => {
       event.preventDefault();
 
       if (!validate()) {

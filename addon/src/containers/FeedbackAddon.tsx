@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useParameter, API } from 'storybook/manager-api';
 import { IconButton } from 'storybook/internal/components';
 import { SupportIcon } from '@storybook/icons';
@@ -34,7 +34,7 @@ interface FeedbackAddonProps {
   api: API;
 }
 
-export const FeedbackAddon: React.FC<FeedbackAddonProps> = ({ api }) => {
+export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
   const buildTimeOptions =
     typeof STORYBOOK_FEEDBACK_SURVEY_OPTIONS === 'undefined'
       ? {}

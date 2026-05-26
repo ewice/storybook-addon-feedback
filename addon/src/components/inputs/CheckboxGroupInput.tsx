@@ -1,4 +1,4 @@
-import React from 'react';
+import { Ref } from 'react';
 import { Choice, ChoiceGroup, ChoiceInput } from '../../ui';
 
 interface CheckboxGroupInputProps {
@@ -9,33 +9,39 @@ interface CheckboxGroupInputProps {
   options: string[];
   values: string[];
   onChange: (option: string, checked: boolean) => void;
+  ref?: Ref<HTMLInputElement>;
 }
 
-export const CheckboxGroupInput = React.forwardRef<HTMLInputElement, CheckboxGroupInputProps>(
-  ({ ariaDescribedBy, ariaInvalid, direction, name, options, values = [], onChange }, ref) => {
-    return (
-      <ChoiceGroup direction={direction}>
-        {options.map((option, index) => {
-          const isChecked = values.includes(option);
+export const CheckboxGroupInput = ({
+  ariaDescribedBy,
+  ariaInvalid,
+  direction,
+  name,
+  options,
+  values = [],
+  onChange,
+  ref
+}: CheckboxGroupInputProps) => {
+  return (
+    <ChoiceGroup direction={direction}>
+      {options.map((option, index) => {
+        const isChecked = values.includes(option);
 
-          return (
-            <Choice key={option} htmlFor={`${name}-${index}`}>
-              <ChoiceInput
-                ref={index === 0 ? ref : undefined}
-                aria-describedby={ariaDescribedBy}
-                aria-invalid={ariaInvalid || undefined}
-                checked={isChecked}
-                id={`${name}-${index}`}
-                type="checkbox"
-                onChange={(e) => onChange(option, e.target.checked)}
-              />
-              {option}
-            </Choice>
-          );
-        })}
-      </ChoiceGroup>
-    );
-  }
-);
-
-CheckboxGroupInput.displayName = 'CheckboxGroupInput';
+        return (
+          <Choice key={option} htmlFor={`${name}-${index}`}>
+            <ChoiceInput
+              ref={index === 0 ? ref : undefined}
+              aria-describedby={ariaDescribedBy}
+              aria-invalid={ariaInvalid || undefined}
+              checked={isChecked}
+              id={`${name}-${index}`}
+              type="checkbox"
+              onChange={(e) => onChange(option, e.target.checked)}
+            />
+            {option}
+          </Choice>
+        );
+      })}
+    </ChoiceGroup>
+  );
+};

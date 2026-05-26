@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { SurveyConfig, SurveyResponses } from '../types';
 import { SurveyForm } from './SurveyForm';
 import { DialogSurface } from '../ui';
@@ -12,7 +12,7 @@ interface SurveyModalProps {
   onSkipPermanent: () => void;
 }
 
-export const SurveyModal: React.FC<SurveyModalProps> = ({
+export const SurveyModal: FC<SurveyModalProps> = ({
   isOpen,
   config,
   isCompleted,

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, ReactNode } from 'react';
 import { styled } from 'storybook/theming';
 import { Label, LabelContent } from './Label';
 import { ErrorText } from './ErrorText';
@@ -19,10 +19,10 @@ export interface CommonFieldProps {
   label: string;
   required?: boolean;
   error?: string;
-  children: (props: FieldRenderProps) => React.ReactNode;
+  children: (props: FieldRenderProps) => ReactNode;
 }
 
-export const Field: React.FC<CommonFieldProps> = ({ id, label, required, error, children }) => {
+export const Field: FC<CommonFieldProps> = ({ id, label, required, error, children }) => {
   const errorId = error ? `${id}-error` : undefined;
 
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { styled } from 'storybook/theming';
 import { Button, mutedTextStyles } from '../ui';
 
@@ -36,7 +36,7 @@ interface SurveyThankYouProps {
   onClose: () => void;
 }
 
-export const SurveyThankYou: React.FC<SurveyThankYouProps> = ({ onClose }) => (
+export const SurveyThankYou: FC<SurveyThankYouProps> = ({ onClose }) => (
   <ThankYouContainer role="status" aria-live="polite">
     <ThankYouTitle>Thank you!</ThankYouTitle>
     <ThankYouText>Your feedback has been successfully submitted.</ThankYouText>

@@ -1,12 +1,12 @@
-import React from 'react';
+import { FC, CSSProperties } from 'react';
 
 export interface CardProps {
   title: string;
   content: string;
 }
 
-export const Card: React.FC<CardProps> = ({ title, content }) => {
-  const style: React.CSSProperties = {
+export const Card: FC<CardProps> = ({ title, content }) => {
+  const style: CSSProperties = {
     padding: '16px',
     borderRadius: '8px',
     border: '1px solid #e2e8f0',

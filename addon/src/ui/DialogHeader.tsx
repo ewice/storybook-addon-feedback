@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { styled } from 'storybook/theming';
 import { focusRing, mutedTextStyles } from './styles';
 
@@ -85,7 +85,7 @@ interface DialogHeaderProps {
   descriptionId?: string;
 }
 
-export const DialogHeader: React.FC<DialogHeaderProps> = ({
+export const DialogHeader: FC<DialogHeaderProps> = ({
   title,
   description,
   onClose,

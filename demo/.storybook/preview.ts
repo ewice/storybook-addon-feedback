@@ -14,8 +14,9 @@ const preview: Preview = {
       description:
         'We would love to get your feedback on our component documentation and guidelines.',
       webhookUrl:
-        (import.meta.env && import.meta.env.STORYBOOK_FEEDBACK_WEBHOOK_URL) ||
-        (typeof process !== 'undefined' && process.env.STORYBOOK_FEEDBACK_WEBHOOK_URL) ||
+        ((import.meta as any).env && (import.meta as any).env.STORYBOOK_FEEDBACK_WEBHOOK_URL) ||
+        (typeof (globalThis as any).process !== 'undefined' &&
+          (globalThis as any).process.env.STORYBOOK_FEEDBACK_WEBHOOK_URL) ||
         'https://httpbin.org/post', // Fallback for local testing
       trigger: {
         delayMs: 5000, // Pop up after 5 seconds

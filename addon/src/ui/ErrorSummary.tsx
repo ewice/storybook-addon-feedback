@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { styled } from 'storybook/theming';
 
 const ErrorSummaryContainer = styled.div(({ theme }) => ({
@@ -25,7 +25,7 @@ interface ErrorSummaryProps {
   items: Array<{ id: string; label: string; message: string }>;
 }
 
-export const ErrorSummary: React.FC<ErrorSummaryProps> = ({ items }) => (
+export const ErrorSummary: FC<ErrorSummaryProps> = ({ items }) => (
   <ErrorSummaryContainer role="alert" aria-live="assertive">
     <ErrorSummaryTitle>Please review the highlighted fields.</ErrorSummaryTitle>
     <ErrorSummaryList>

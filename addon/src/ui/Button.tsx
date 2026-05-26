@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, FC } from 'react';
 import { styled } from 'storybook/theming';
 import { focusRing } from './styles';
 
@@ -64,8 +64,6 @@ interface ButtonProps extends ComponentProps<'button'> {
   variant?: ButtonVariant;
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
-  type = 'button',
-  ...props
-}) => <StyledButton type={type} $variant={variant} {...props} />;
+export const Button: FC<ButtonProps> = ({ variant = 'primary', type = 'button', ...props }) => (
+  <StyledButton type={type} $variant={variant} {...props} />
+);
