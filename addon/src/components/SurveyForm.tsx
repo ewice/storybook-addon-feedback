@@ -88,7 +88,7 @@ export const SurveyForm: FC<SurveyFormProps> = ({
 
       <FooterActions>
         <Button variant="dangerSubtle" onClick={onSkipPermanent}>
-          Don't show again
+          {"Don't show again"}
         </Button>
         <Button variant="secondary" onClick={onClose}>
           Cancel

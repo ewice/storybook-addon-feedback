@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useParameter, API } from 'storybook/manager-api';
-import { IconButton } from 'storybook/internal/components';
+import { Button } from 'storybook/internal/components';
 import { SupportIcon } from '@storybook/icons';
 import { styled } from 'storybook/theming';
 import { SurveyConfig, SurveyResponses } from '../types';
@@ -99,17 +99,20 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
 
   return (
     <>
-      <IconButton
+      <Button
+        ariaLabel="Share your feedback"
         key="feedback-survey-toolbar-button"
-        title="Share your feedback"
-        aria-label="Share your feedback"
+        padding="small"
+        size="small"
+        tooltip="Share your feedback"
+        variant="ghost"
         onClick={handleOpen}
       >
         <IconWrapper>
           <SupportIcon />
           {showNotification && <NotificationDot />}
         </IconWrapper>
-      </IconButton>
+      </Button>
 
       <SurveyModal
         key={config.surveyId}

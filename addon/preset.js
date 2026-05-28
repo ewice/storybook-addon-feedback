@@ -10,7 +10,7 @@ async function managerWebpack(config, options) {
         STORYBOOK_FEEDBACK_SURVEY_OPTIONS: JSON.stringify(options || {})
       })
     );
-  } catch (err) {
+  } catch {
     // webpack package is not installed or failed to load (common in pure Vite setups)
   }
   return config;
@@ -20,6 +20,18 @@ async function viteFinal(config, options) {
   config.define = {
     ...config.define,
     STORYBOOK_FEEDBACK_SURVEY_OPTIONS: JSON.stringify(options || {})
+  };
+  config.optimizeDeps = {
+    ...config.optimizeDeps,
+    include: [
+      ...new Set([
+        ...(config.optimizeDeps?.include || []),
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@storybook/react'
+      ])
+    ]
   };
   return config;
 }

@@ -8,17 +8,5 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "devDependencies": {
-    "@storybook/react": "^10.4.0",
-    "@storybook/react-vite": "^10.4.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "storybook": "^10.4.0",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.11"
-  }
+  "dependencies": {}
 }

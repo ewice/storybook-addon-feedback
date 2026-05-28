@@ -9,20 +9,11 @@
     "preset.js"
   ],
   "scripts": {
-    "build": "tsup src/manager.tsx src/types.ts --format esm --clean --dts --inject react-shim.js --external react,react-dom,storybook/manager-api,storybook/internal/components,storybook/theming,@storybook/icons",
-    "watch": "tsup src/manager.tsx src/types.ts --format esm --dts --watch --inject react-shim.js --external react,react-dom,storybook/manager-api,storybook/internal/components,storybook/theming,@storybook/icons"
-  },
-  "devDependencies": {
-    "storybook": "^10.4.0",
-    "@storybook/icons": "^2.0.2",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "typescript": "^5.4.5",
-    "tsup": "^8.0.2"
+    "build": "tsup",
+    "watch": "tsup --watch"
   },
   "peerDependencies": {
+    "@storybook/icons": "^2.0.0",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "storybook": "^10.0.0"
