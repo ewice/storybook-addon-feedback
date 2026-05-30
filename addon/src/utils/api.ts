@@ -45,7 +45,7 @@ export const submitFeedbackWebhook = async (
     }
   } catch (err) {
     console.error('[Feedback Survey Addon] Webhook submission failed:', err);
-    throw err; // Forward to form caller for UI error states
+    throw err;
   }
 
   return payload;

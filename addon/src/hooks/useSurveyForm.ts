@@ -34,14 +34,17 @@ export const useSurveyForm = ({ config, isCompleted, onSubmit }: UseSurveyFormPr
   }, []);
 
   const handleCheckboxChange = useCallback((fieldId: string, option: string, checked: boolean) => {
-    setValues((prev) => {
+    setValues(prev => {
       const current = (prev[fieldId] as string[]) || [];
       const next = checked ? [...current, option] : current.filter((item) => item !== option);
       return { ...prev, [fieldId]: next };
     });
 
-    setErrors((prev) => {
-      if (!prev[fieldId]) return prev;
+    setErrors(prev => {
+      if (!prev[fieldId]) {
+        return prev;
+      }
+
       const next = { ...prev };
       delete next[fieldId];
       return next;
