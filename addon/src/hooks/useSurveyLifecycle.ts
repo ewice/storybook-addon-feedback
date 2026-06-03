@@ -1,10 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { API } from 'storybook/manager-api';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { SurveyConfig } from '../types';
-
-const DEFAULT_DELAY_MS = 5000;
-const DEFAULT_STORY_COUNT = 3;
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
+import { DEFAULT_DELAY_MS, DEFAULT_STORY_COUNT, MS_PER_DAY } from '../constants';
 
 export interface SurveyLifecycleProps {
   config: SurveyConfig;
@@ -13,7 +9,7 @@ export interface SurveyLifecycleProps {
   dismissedAt: number | null;
   impressionCount: number;
   incrementImpressions: () => number;
-  api: API;
+  onStoryChange: (cb: () => void) => () => void;
   isSessionDismissed: boolean;
 }
 
@@ -24,7 +20,7 @@ export const useSurveyLifecycle = ({
   dismissedAt,
   impressionCount,
   incrementImpressions,
-  api,
+  onStoryChange,
   isSessionDismissed
 }: SurveyLifecycleProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,30 +30,43 @@ export const useSurveyLifecycle = ({
   const triggerOptions = config.trigger || {};
 
   // 1. Calculate Suppression States
-  const isExpired = triggerOptions.expiresAt
-    ? new Date() > new Date(triggerOptions.expiresAt)
-    : false;
-  const isGloballyDisabled = config.enabled === false;
-  const isMaxImpressionsReached =
-    !!triggerOptions.maxImpressions && impressionCount >= triggerOptions.maxImpressions;
+  const shouldBlockAutoPopup = useMemo(() => {
+    const isExpired = triggerOptions.expiresAt
+      ? new Date() > new Date(triggerOptions.expiresAt)
+      : false;
+    const isGloballyDisabled = config.enabled === false;
+    const isMaxImpressionsReached =
+      !!triggerOptions.maxImpressions && impressionCount >= triggerOptions.maxImpressions;
 
-  let isSnoozed = false;
-  if (dismissedAt && triggerOptions.coolDownDays) {
-    const coolDownMs = triggerOptions.coolDownDays * MS_PER_DAY;
-    const timeSinceDismissal = Date.now() - dismissedAt;
-    if (timeSinceDismissal < coolDownMs) {
-      isSnoozed = true;
+    let isSnoozed = false;
+    if (dismissedAt && triggerOptions.coolDownDays) {
+      const coolDownMs = triggerOptions.coolDownDays * MS_PER_DAY;
+      const timeSinceDismissal = Date.now() - dismissedAt;
+      if (timeSinceDismissal < coolDownMs) {
+        isSnoozed = true;
+      }
     }
-  }
 
-  const shouldBlockAutoPopup =
-    isCompleted ||
-    isSkippedPermanently ||
-    isSessionDismissed ||
-    isExpired ||
-    isGloballyDisabled ||
-    isMaxImpressionsReached ||
-    isSnoozed;
+    return (
+      isCompleted ||
+      isSkippedPermanently ||
+      isSessionDismissed ||
+      isExpired ||
+      isGloballyDisabled ||
+      isMaxImpressionsReached ||
+      isSnoozed
+    );
+  }, [
+    isCompleted,
+    isSkippedPermanently,
+    isSessionDismissed,
+    config.enabled,
+    triggerOptions.expiresAt,
+    triggerOptions.maxImpressions,
+    triggerOptions.coolDownDays,
+    dismissedAt,
+    impressionCount
+  ]);
 
   // 2. Handle Automatic Time-Delay Trigger
   useEffect(() => {
@@ -103,11 +112,11 @@ export const useSurveyLifecycle = ({
       });
     };
 
-    api.on('storyChanged', handleStoryChanged);
+    const unsubscribe = onStoryChange(handleStoryChanged);
     return () => {
-      api.off('storyChanged', handleStoryChanged);
+      unsubscribe();
     };
-  }, [api, shouldBlockAutoPopup, triggerOptions.storyCount, isOpen, incrementImpressions]);
+  }, [onStoryChange, shouldBlockAutoPopup, triggerOptions.storyCount, isOpen, incrementImpressions]);
 
   // 4. Handle Global Keyboard Shortcut Override (Alt + Shift + S)
   useEffect(() => {

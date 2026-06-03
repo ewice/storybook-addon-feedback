@@ -1,7 +1,7 @@
 import { StarIcon } from '@storybook/icons';
 import { useState, Ref } from 'react';
 import { styled } from 'storybook/theming';
-import { focusRing } from '../../ui';
+import { focusRing } from '../../ui/styles';
 
 const StarsContainer = styled.div({
   display: 'flex',

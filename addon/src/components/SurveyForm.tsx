@@ -3,7 +3,8 @@ import { styled } from 'storybook/theming';
 import { SurveyConfig, SurveyResponses } from '../types';
 import { useSurveyForm } from '../hooks/useSurveyForm';
 import { QuestionRenderer } from './QuestionRenderer';
-import { Button, ErrorSummary } from '../ui';
+import { Button } from '../ui/Button';
+import { ErrorSummary } from '../ui/ErrorSummary';
 import { SurveyThankYou } from './SurveyThankYou';
 
 const FormContainer = styled.form(({ theme }) => ({
@@ -36,6 +37,9 @@ interface SurveyFormProps {
   onSubmit: (data: SurveyResponses) => Promise<void>;
   onClose: () => void;
   onSkipPermanent: () => void;
+  getDraft: () => SurveyResponses;
+  saveDraft: (values: SurveyResponses) => void;
+  clearDraft: () => void;
 }
 
 export const SurveyForm: FC<SurveyFormProps> = ({
@@ -43,7 +47,10 @@ export const SurveyForm: FC<SurveyFormProps> = ({
   isCompleted,
   onSubmit,
   onClose,
-  onSkipPermanent
+  onSkipPermanent,
+  getDraft,
+  saveDraft,
+  clearDraft
 }) => {
   const {
     values,
@@ -54,7 +61,7 @@ export const SurveyForm: FC<SurveyFormProps> = ({
     handleCheckboxChange,
     handleSubmit,
     fieldRefs
-  } = useSurveyForm({ config, isCompleted, onSubmit });
+  } = useSurveyForm({ config, isCompleted, onSubmit, getDraft, saveDraft, clearDraft });
 
   if (isSubmitted) {
     return <SurveyThankYou onClose={onClose} />;

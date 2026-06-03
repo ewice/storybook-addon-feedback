@@ -1,13 +1,12 @@
 import { FC, MutableRefObject } from 'react';
 import { SurveyField, SurveyResponseValue } from '../types';
-import {
-  CheckboxGroupInput,
-  RadioGroupInput,
-  StarRatingInput,
-  TextInputField,
-  TextAreaField
-} from './inputs';
-import { Field, Fieldset } from '../ui';
+import { CheckboxGroupInput } from './inputs/CheckboxGroupInput';
+import { RadioGroupInput } from './inputs/RadioGroupInput';
+import { StarRatingInput } from './inputs/StarRatingInput';
+import { TextInputField } from './inputs/TextInputField';
+import { TextAreaField } from './inputs/TextAreaField';
+import { Field } from '../ui/Field';
+import { Fieldset } from '../ui/Fieldset';
 
 interface QuestionRendererProps {
   question: SurveyField;

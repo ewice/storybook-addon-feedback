@@ -1,16 +1,24 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from 'react';
-import { useSurveyStorage } from './useSurveyStorage';
 import { SurveyConfig, SurveyResponses, SurveyResponseValue } from '../types';
 
 export interface UseSurveyFormProps {
   config: SurveyConfig;
   isCompleted: boolean;
   onSubmit: (data: SurveyResponses) => Promise<void>;
+  getDraft: () => SurveyResponses;
+  saveDraft: (values: SurveyResponses) => void;
+  clearDraft: () => void;
 }
 
-export const useSurveyForm = ({ config, isCompleted, onSubmit }: UseSurveyFormProps) => {
-  const storage = useSurveyStorage(config.surveyId);
-  const [values, setValues] = useState<SurveyResponses>(() => storage.getDraft());
+export const useSurveyForm = ({
+  config,
+  isCompleted,
+  onSubmit,
+  getDraft,
+  saveDraft,
+  clearDraft
+}: UseSurveyFormProps) => {
+  const [values, setValues] = useState<SurveyResponses>(() => getDraft());
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(() => isCompleted);
@@ -18,9 +26,9 @@ export const useSurveyForm = ({ config, isCompleted, onSubmit }: UseSurveyFormPr
 
   useEffect(() => {
     if (!isSubmitted) {
-      storage.saveDraft(values);
+      saveDraft(values);
     }
-  }, [isSubmitted, storage, values]);
+  }, [isSubmitted, saveDraft, values]);
 
   const handleFieldChange = useCallback((fieldId: string, nextValue: SurveyResponseValue) => {
     setValues((prev) => ({ ...prev, [fieldId]: nextValue }));
@@ -109,7 +117,7 @@ export const useSurveyForm = ({ config, isCompleted, onSubmit }: UseSurveyFormPr
 
       try {
         await onSubmit(values);
-        storage.clearDraft();
+        clearDraft();
         setIsSubmitted(true);
       } catch (error) {
         console.error('Failed to submit survey:', error);
@@ -118,7 +126,7 @@ export const useSurveyForm = ({ config, isCompleted, onSubmit }: UseSurveyFormPr
         setIsSubmitting(false);
       }
     },
-    [validate, onSubmit, values, storage]
+    [validate, onSubmit, values, clearDraft]
   );
 
   return {

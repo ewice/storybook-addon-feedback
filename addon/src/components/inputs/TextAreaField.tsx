@@ -1,6 +1,6 @@
 import { Ref } from 'react';
 import { styled } from 'storybook/theming';
-import { inputBaseStyles } from '../../ui';
+import { inputBaseStyles } from '../../ui/styles';
 
 const TextArea = styled.textarea(({ theme }) => ({
   ...inputBaseStyles(theme),

@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { SurveyResponses } from '../types';
+import { STORAGE_KEYS } from '../constants';
+import { safeStorage } from '../utils/storage';
 
 export interface SurveyStorageState {
   isCompleted: boolean;
@@ -9,45 +11,13 @@ export interface SurveyStorageState {
   isSessionDismissed: boolean;
 }
 
-const safeStorage = {
-  getItem(key: string, isSession = false): string | null {
-    try {
-      return isSession ? sessionStorage.getItem(key) : localStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  },
-  setItem(key: string, value: string, isSession = false): void {
-    try {
-      if (isSession) {
-        sessionStorage.setItem(key, value);
-      } else {
-        localStorage.setItem(key, value);
-      }
-    } catch {
-      // Graceful fallback if storage is blocked
-    }
-  },
-  removeItem(key: string, isSession = false): void {
-    try {
-      if (isSession) {
-        sessionStorage.removeItem(key);
-      } else {
-        localStorage.removeItem(key);
-      }
-    } catch {
-      // Graceful fallback if storage is blocked
-    }
-  }
-};
-
 export const useSurveyStorage = (surveyId: string) => {
-  const completedKey = `sb-survey-completed-${surveyId}`;
-  const skippedPermanentlyKey = `sb-survey-skipped-${surveyId}`;
-  const dismissedAtKey = `sb-survey-dismissed-at-${surveyId}`;
-  const sessionDismissedKey = `sb-survey-session-dismissed-${surveyId}`;
-  const impressionCountKey = `sb-survey-impressions-${surveyId}`;
-  const draftKey = `sb-survey-draft-${surveyId}`;
+  const completedKey = STORAGE_KEYS.completed(surveyId);
+  const skippedPermanentlyKey = STORAGE_KEYS.skippedPermanently(surveyId);
+  const dismissedAtKey = STORAGE_KEYS.dismissedAt(surveyId);
+  const sessionDismissedKey = STORAGE_KEYS.sessionDismissed(surveyId);
+  const impressionCountKey = STORAGE_KEYS.impressionCount(surveyId);
+  const draftKey = STORAGE_KEYS.draft(surveyId);
 
   const [state, setState] = useState<SurveyStorageState>(() => {
     const isCompleted = safeStorage.getItem(completedKey) === 'true';

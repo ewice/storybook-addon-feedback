@@ -1,5 +1,5 @@
 import { Ref } from 'react';
-import { Choice, ChoiceGroup, ChoiceInput } from '../../ui';
+import { Choice, ChoiceGroup, ChoiceInput } from '../../ui/Choice';
 
 interface CheckboxGroupInputProps {
   ariaDescribedBy?: string;

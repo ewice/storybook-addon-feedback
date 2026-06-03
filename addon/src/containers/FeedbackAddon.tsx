@@ -4,10 +4,12 @@ import { Button } from 'storybook/internal/components';
 import { SupportIcon } from '@storybook/icons';
 import { styled } from 'storybook/theming';
 import { SurveyConfig, SurveyResponses } from '../types';
-import { SurveyModal } from '../components/SurveyModal';
 import { useSurveyStorage } from '../hooks/useSurveyStorage';
 import { useSurveyLifecycle } from '../hooks/useSurveyLifecycle';
 import { submitFeedbackWebhook } from '../utils/api';
+import { CHANNEL_EVENTS } from '../constants';
+import { DialogSurface } from '../ui/DialogSurface';
+import { SurveyForm } from '../components/SurveyForm';
 
 declare global {
   const STORYBOOK_FEEDBACK_SURVEY_OPTIONS: Partial<SurveyConfig> | undefined;
@@ -60,7 +62,10 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
     dismissedAt: storage.dismissedAt,
     impressionCount: storage.impressionCount,
     incrementImpressions: storage.incrementImpressions,
-    api,
+    onStoryChange: (cb) => {
+      api.on('storyChanged', cb);
+      return () => api.off('storyChanged', cb);
+    },
     isSessionDismissed: storage.isSessionDismissed
   });
 
@@ -85,7 +90,7 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
 
     const channel = api.getChannel();
     if (channel) {
-      channel.emit('feedback-survey/submitted', payload);
+      channel.emit(CHANNEL_EVENTS.SUBMITTED, payload);
     }
 
     storage.setCompleted();
@@ -114,15 +119,24 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
         </IconWrapper>
       </Button>
 
-      <SurveyModal
-        key={config.surveyId}
+      <DialogSurface
         isOpen={isOpen}
-        config={config}
-        isCompleted={storage.isCompleted}
-        onSubmit={handleSubmit}
+        title={config.title}
+        description={config.description}
         onClose={handleClose}
-        onSkipPermanent={handleSkipPermanent}
-      />
+      >
+        <SurveyForm
+          key={config.surveyId}
+          config={config}
+          isCompleted={storage.isCompleted}
+          onSubmit={handleSubmit}
+          onClose={handleClose}
+          onSkipPermanent={handleSkipPermanent}
+          getDraft={storage.getDraft}
+          saveDraft={storage.saveDraft}
+          clearDraft={storage.clearDraft}
+        />
+      </DialogSurface>
     </>
   );
 };

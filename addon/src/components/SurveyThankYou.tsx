@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { styled } from 'storybook/theming';
-import { Button, mutedTextStyles } from '../ui';
+import { Button } from '../ui/Button';
+import { mutedTextStyles } from '../ui/styles';
 
 const ThankYouContainer = styled.div(({ theme }) => ({
   display: 'flex',
