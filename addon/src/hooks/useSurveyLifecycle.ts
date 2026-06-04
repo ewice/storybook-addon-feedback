@@ -1,36 +1,34 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { SurveyConfig } from '../types';
 import { DEFAULT_DELAY_MS, DEFAULT_STORY_COUNT, MS_PER_DAY } from '../constants';
+import { SurveyStorage } from './useSurveyStorage';
 
 export interface SurveyLifecycleProps {
   config: SurveyConfig;
-  isCompleted: boolean;
-  isSkippedPermanently: boolean;
-  dismissedAt: number | null;
-  impressionCount: number;
-  incrementImpressions: () => number;
+  persistence: SurveyStorage;
   onStoryChange: (cb: () => void) => () => void;
-  isSessionDismissed: boolean;
 }
 
 export const useSurveyLifecycle = ({
   config,
-  isCompleted,
-  isSkippedPermanently,
-  dismissedAt,
-  impressionCount,
-  incrementImpressions,
-  onStoryChange,
-  isSessionDismissed
+  persistence,
+  onStoryChange
 }: SurveyLifecycleProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [navCount, setNavCount] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const { recordImpression } = persistence.actions;
 
   const triggerOptions = config.trigger || {};
 
   // 1. Calculate Suppression States
   const shouldBlockAutoPopup = useMemo(() => {
+    const isCompleted = persistence.state.isCompleted;
+    const isSkippedPermanently = persistence.state.isSkippedPermanently;
+    const dismissedAt = persistence.state.dismissedAt;
+    const impressionCount = persistence.state.impressionCount;
+    const isSessionDismissed = persistence.state.isSessionDismissed;
+
     const isExpired = triggerOptions.expiresAt
       ? new Date() > new Date(triggerOptions.expiresAt)
       : false;
@@ -57,15 +55,15 @@ export const useSurveyLifecycle = ({
       isSnoozed
     );
   }, [
-    isCompleted,
-    isSkippedPermanently,
-    isSessionDismissed,
+    persistence.state.isCompleted,
+    persistence.state.isSkippedPermanently,
+    persistence.state.dismissedAt,
+    persistence.state.impressionCount,
+    persistence.state.isSessionDismissed,
     config.enabled,
     triggerOptions.expiresAt,
     triggerOptions.maxImpressions,
-    triggerOptions.coolDownDays,
-    dismissedAt,
-    impressionCount
+    triggerOptions.coolDownDays
   ]);
 
   // 2. Handle Automatic Time-Delay Trigger
@@ -78,7 +76,7 @@ export const useSurveyLifecycle = ({
 
     if (delay > 0) {
       timerRef.current = setTimeout(() => {
-        incrementImpressions();
+        recordImpression();
         setIsOpen(true);
       }, delay);
     }
@@ -93,7 +91,7 @@ export const useSurveyLifecycle = ({
     config.questions,
     triggerOptions.delayMs,
     isOpen,
-    incrementImpressions
+    recordImpression
   ]);
 
   // 3. Handle Story Navigation Count Trigger
@@ -105,7 +103,7 @@ export const useSurveyLifecycle = ({
           triggerOptions.storyCount !== undefined ? triggerOptions.storyCount : DEFAULT_STORY_COUNT;
 
         if (!shouldBlockAutoPopup && !isOpen && requiredNavs > 0 && nextCount >= requiredNavs) {
-          incrementImpressions();
+          recordImpression();
           setIsOpen(true);
         }
         return nextCount;
@@ -116,7 +114,7 @@ export const useSurveyLifecycle = ({
     return () => {
       unsubscribe();
     };
-  }, [onStoryChange, shouldBlockAutoPopup, triggerOptions.storyCount, isOpen, incrementImpressions]);
+  }, [onStoryChange, shouldBlockAutoPopup, triggerOptions.storyCount, isOpen, recordImpression]);
 
   // 4. Handle Global Keyboard Shortcut Override (Alt + Shift + S)
   useEffect(() => {

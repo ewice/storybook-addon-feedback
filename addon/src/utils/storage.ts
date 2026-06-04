@@ -35,3 +35,29 @@ export const safeStorage: StorageAdapter = {
     }
   }
 };
+
+export const createMemoryStorage = (): StorageAdapter => {
+  const localStore = new Map<string, string>();
+  const sessionStore = new Map<string, string>();
+
+  return {
+    getItem(key, isSession = false) {
+      return (isSession ? sessionStore.get(key) : localStore.get(key)) ?? null;
+    },
+    setItem(key, value, isSession = false) {
+      if (isSession) {
+        sessionStore.set(key, value);
+      } else {
+        localStore.set(key, value);
+      }
+    },
+    removeItem(key, isSession = false) {
+      if (isSession) {
+        sessionStore.delete(key);
+      } else {
+        localStore.delete(key);
+      }
+    }
+  };
+};
+

@@ -1,4 +1,4 @@
-import { FC, MutableRefObject } from 'react';
+import { RefObject, memo } from 'react';
 import { SurveyField, SurveyResponseValue } from '../types';
 import { CheckboxGroupInput } from './inputs/CheckboxGroupInput';
 import { RadioGroupInput } from './inputs/RadioGroupInput';
@@ -14,17 +14,17 @@ interface QuestionRendererProps {
   error?: string;
   onChange: (fieldId: string, nextValue: SurveyResponseValue) => void;
   onCheckboxChange: (fieldId: string, option: string, checked: boolean) => void;
-  fieldRefs: MutableRefObject<Record<string, HTMLElement | null>>;
+  fieldRefs: RefObject<Record<string, HTMLElement | null>>;
 }
 
-export const QuestionRenderer: FC<QuestionRendererProps> = ({
+export const QuestionRenderer = memo(({
   question,
   value,
   error,
   onChange,
   onCheckboxChange,
   fieldRefs
-}) => {
+}: QuestionRendererProps) => {
   const { id, type, label, required, options, placeholder, direction } = question;
 
   const commonProps = {
@@ -128,4 +128,6 @@ export const QuestionRenderer: FC<QuestionRendererProps> = ({
       )}
     </Field>
   );
-};
+});
+
+QuestionRenderer.displayName = 'QuestionRenderer';

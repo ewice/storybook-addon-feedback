@@ -57,9 +57,10 @@ export const SurveyForm: FC<SurveyFormProps> = ({
     errors,
     isSubmitting,
     isSubmitted,
+    submissionError,
+    handleSubmit,
     handleFieldChange,
     handleCheckboxChange,
-    handleSubmit,
     fieldRefs
   } = useSurveyForm({ config, isCompleted, onSubmit, getDraft, saveDraft, clearDraft });
 
@@ -91,7 +92,7 @@ export const SurveyForm: FC<SurveyFormProps> = ({
         />
       ))}
 
-      {errors.submit && <SubmissionError role="alert">{errors.submit}</SubmissionError>}
+      {submissionError && <SubmissionError role="alert">{submissionError}</SubmissionError>}
 
       <FooterActions>
         <Button variant="dangerSubtle" onClick={onSkipPermanent}>

@@ -11,10 +11,6 @@ import { CHANNEL_EVENTS } from '../constants';
 import { DialogSurface } from '../ui/DialogSurface';
 import { SurveyForm } from '../components/SurveyForm';
 
-declare global {
-  const STORYBOOK_FEEDBACK_SURVEY_OPTIONS: Partial<SurveyConfig> | undefined;
-}
-
 const IconWrapper = styled.div({
   position: 'relative',
   display: 'inline-flex',
@@ -57,16 +53,11 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
 
   const { isOpen, setIsOpen } = useSurveyLifecycle({
     config,
-    isCompleted: storage.isCompleted,
-    isSkippedPermanently: storage.isSkippedPermanently,
-    dismissedAt: storage.dismissedAt,
-    impressionCount: storage.impressionCount,
-    incrementImpressions: storage.incrementImpressions,
+    persistence: storage,
     onStoryChange: (cb) => {
       api.on('storyChanged', cb);
       return () => api.off('storyChanged', cb);
-    },
-    isSessionDismissed: storage.isSessionDismissed
+    }
   });
 
   const handleOpen = () => {
@@ -75,14 +66,14 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
 
   const handleClose = () => {
     setIsOpen(false);
-    if (!storage.isCompleted) {
-      storage.setDismissed(Date.now());
+    if (!storage.state.isCompleted) {
+      storage.actions.dismiss(Date.now());
     }
   };
 
   const handleSkipPermanent = () => {
     setIsOpen(false);
-    storage.setSkippedPermanently();
+    storage.actions.skipPermanently();
   };
 
   const handleSubmit = async (responses: SurveyResponses) => {
@@ -93,14 +84,14 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
       channel.emit(CHANNEL_EVENTS.SUBMITTED, payload);
     }
 
-    storage.setCompleted();
+    storage.actions.complete();
   };
 
   if (!config.questions || config.questions.length === 0) {
     return null;
   }
 
-  const showNotification = !storage.isCompleted && !storage.isSkippedPermanently;
+  const showNotification = !storage.state.isCompleted && !storage.state.isSkippedPermanently;
 
   return (
     <>
@@ -128,13 +119,13 @@ export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
         <SurveyForm
           key={config.surveyId}
           config={config}
-          isCompleted={storage.isCompleted}
+          isCompleted={storage.state.isCompleted}
           onSubmit={handleSubmit}
           onClose={handleClose}
           onSkipPermanent={handleSkipPermanent}
-          getDraft={storage.getDraft}
-          saveDraft={storage.saveDraft}
-          clearDraft={storage.clearDraft}
+          getDraft={storage.draft.get}
+          saveDraft={storage.draft.save}
+          clearDraft={storage.draft.clear}
         />
       </DialogSurface>
     </>

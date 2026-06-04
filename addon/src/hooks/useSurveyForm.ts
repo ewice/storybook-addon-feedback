@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from 'react';
 import { SurveyConfig, SurveyResponses, SurveyResponseValue } from '../types';
+import { validateSurvey } from '../utils/validation';
 
 export interface UseSurveyFormProps {
   config: SurveyConfig;
@@ -22,42 +23,11 @@ export const useSurveyForm = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(() => isCompleted);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const fieldRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  useEffect(() => {
-    if (!isSubmitted) {
-      saveDraft(values);
-    }
-  }, [isSubmitted, saveDraft, values]);
-
-  const handleFieldChange = useCallback((fieldId: string, nextValue: SurveyResponseValue) => {
-    setValues((prev) => ({ ...prev, [fieldId]: nextValue }));
-
-    setErrors((prev) => {
-      if (!prev[fieldId]) return prev;
-      const next = { ...prev };
-      delete next[fieldId];
-      return next;
-    });
-  }, []);
-
-  const handleCheckboxChange = useCallback((fieldId: string, option: string, checked: boolean) => {
-    setValues(prev => {
-      const current = (prev[fieldId] as string[]) || [];
-      const next = checked ? [...current, option] : current.filter((item) => item !== option);
-      return { ...prev, [fieldId]: next };
-    });
-
-    setErrors(prev => {
-      if (!prev[fieldId]) {
-        return prev;
-      }
-
-      const next = { ...prev };
-      delete next[fieldId];
-      return next;
-    });
-  }, []);
+  const valuesRef = useRef(values);
+  valuesRef.current = values;
 
   const focusQuestion = useCallback((questionId: string) => {
     const element = fieldRefs.current[questionId];
@@ -67,34 +37,7 @@ export const useSurveyForm = ({
   }, []);
 
   const validate = useCallback(() => {
-    const nextErrors: Record<string, string> = {};
-
-    config.questions.forEach((question) => {
-      if (!question.required) {
-        return;
-      }
-
-      const value = values[question.id];
-
-      if (question.type === 'checkbox') {
-        if (!value || (value as string[]).length === 0) {
-          nextErrors[question.id] = 'Please select at least one option.';
-        }
-        return;
-      }
-
-      if (question.type === 'rating') {
-        if (!value || value === 0) {
-          nextErrors[question.id] = 'Please select a rating.';
-        }
-        return;
-      }
-
-      if (!value || (typeof value === 'string' && value.trim() === '')) {
-        nextErrors[question.id] = 'This field is required.';
-      }
-    });
-
+    const nextErrors = validateSurvey(config.questions, valuesRef.current);
     setErrors(nextErrors);
 
     const firstInvalidQuestionId = config.questions.find((question) => nextErrors[question.id])?.id;
@@ -103,7 +46,7 @@ export const useSurveyForm = ({
     }
 
     return Object.keys(nextErrors).length === 0;
-  }, [config.questions, values, focusQuestion]);
+  }, [config.questions, focusQuestion]);
 
   const handleSubmit = useCallback(
     async (event: FormEvent) => {
@@ -114,29 +57,68 @@ export const useSurveyForm = ({
       }
 
       setIsSubmitting(true);
+      setSubmissionError(null);
 
       try {
-        await onSubmit(values);
+        await onSubmit(valuesRef.current);
         clearDraft();
         setIsSubmitted(true);
       } catch (error) {
         console.error('Failed to submit survey:', error);
-        setErrors((prev) => ({ ...prev, submit: 'Failed to submit feedback. Please try again.' }));
+        setSubmissionError('Failed to submit feedback. Please try again.');
       } finally {
         setIsSubmitting(false);
       }
     },
-    [validate, onSubmit, values, clearDraft]
+    [validate, onSubmit, clearDraft]
   );
+
+  // Save draft on beforeunload (covers tab close / navigation)
+  useEffect(() => {
+    const save = () => {
+      if (!isSubmitted) {
+        saveDraft(valuesRef.current);
+      }
+    };
+    window.addEventListener('beforeunload', save);
+    return () => {
+      save(); // save when the component unmounts (dialog closes)
+      window.removeEventListener('beforeunload', save);
+    };
+  }, [saveDraft, isSubmitted]);
+
+  const clearFieldError = useCallback((fieldId: string) => {
+    setErrors((prev) => {
+      if (!prev[fieldId]) return prev;
+      const next = { ...prev };
+      delete next[fieldId];
+      return next;
+    });
+  }, []);
+
+  const handleFieldChange = useCallback((fieldId: string, nextValue: SurveyResponseValue) => {
+    setValues((prev) => ({ ...prev, [fieldId]: nextValue }));
+    clearFieldError(fieldId);
+  }, [clearFieldError]);
+
+  const handleCheckboxChange = useCallback((fieldId: string, option: string, checked: boolean) => {
+    setValues(prev => {
+      const current = (prev[fieldId] as string[]) || [];
+      const next = checked ? [...current, option] : current.filter((item) => item !== option);
+      return { ...prev, [fieldId]: next };
+    });
+    clearFieldError(fieldId);
+  }, [clearFieldError]);
 
   return {
     values,
     errors,
     isSubmitting,
     isSubmitted,
+    submissionError,
+    handleSubmit,
     handleFieldChange,
     handleCheckboxChange,
-    handleSubmit,
     fieldRefs
   };
 };
