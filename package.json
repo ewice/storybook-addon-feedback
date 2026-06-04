@@ -6,11 +6,12 @@
     "demo"
   ],
   "scripts": {
-    "addon:build": "npm run build --workspace=addon",
-    "addon:watch": "npm run watch --workspace=addon",
-    "demo:storybook": "npm run storybook --workspace=demo",
-    "build": "npm run addon:build",
-    "storybook": "npm run demo:storybook",
+    "addon:build": "vp run storybook-feedback-survey#build",
+    "addon:watch": "vp run storybook-feedback-survey#watch",
+    "demo:storybook": "vp run demo-storybook#storybook",
+    "build": "vp run addon:build",
+    "watch": "vp run addon:watch",
+    "storybook": "vp run demo:storybook",
     "format": "vp fmt .",
     "format:check": "vp fmt --check .",
     "lint": "vp lint \"addon/src/**/*.{ts,tsx}\" \"demo/src/**/*.{ts,tsx}\"",
