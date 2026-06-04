@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vite-plus/test';
 import { submitFeedbackWebhook } from './api';
 import { SurveyConfig } from '../types';
 
@@ -17,6 +17,7 @@ describe('submitFeedbackWebhook', () => {
   it('should return payload directly if webhookUrl is not configured', async () => {
     const config: SurveyConfig = {
       surveyId: 'test-survey',
+      title: 'Test Survey',
       questions: []
     };
 
@@ -29,6 +30,7 @@ describe('submitFeedbackWebhook', () => {
   it('should post payload to webhookUrl if configured', async () => {
     const config: SurveyConfig = {
       surveyId: 'test-survey',
+      title: 'Test Survey',
       questions: [],
       webhookUrl: 'https://example.com/webhook',
       webhookHeaders: { 'X-Custom': 'value' }
@@ -54,6 +56,7 @@ describe('submitFeedbackWebhook', () => {
   it('should throw an error if the request fails', async () => {
     const config: SurveyConfig = {
       surveyId: 'test-survey',
+      title: 'Test Survey',
       questions: [],
       webhookUrl: 'https://example.com/webhook'
     };

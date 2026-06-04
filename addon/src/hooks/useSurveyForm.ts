@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, FormEvent } from 'react';
+import { useState, useEffect, useRef, useCallback, SubmitEvent } from 'react';
 import { SurveyConfig, SurveyResponses, SurveyResponseValue } from '../types';
 import { validateSurvey } from '../utils/validation';
 
@@ -49,7 +49,7 @@ export const useSurveyForm = ({
   }, [config.questions, focusQuestion]);
 
   const handleSubmit = useCallback(
-    async (event: FormEvent) => {
+    async (event: SubmitEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       if (!validate()) {
@@ -82,33 +82,42 @@ export const useSurveyForm = ({
     };
     window.addEventListener('beforeunload', save);
     return () => {
-      save(); // save when the component unmounts (dialog closes)
+      save();
       window.removeEventListener('beforeunload', save);
     };
   }, [saveDraft, isSubmitted]);
 
   const clearFieldError = useCallback((fieldId: string) => {
     setErrors((prev) => {
-      if (!prev[fieldId]) return prev;
+      if (!prev[fieldId]) {
+        return prev;
+      }
+
       const next = { ...prev };
       delete next[fieldId];
       return next;
     });
   }, []);
 
-  const handleFieldChange = useCallback((fieldId: string, nextValue: SurveyResponseValue) => {
-    setValues((prev) => ({ ...prev, [fieldId]: nextValue }));
-    clearFieldError(fieldId);
-  }, [clearFieldError]);
+  const handleFieldChange = useCallback(
+    (fieldId: string, nextValue: SurveyResponseValue) => {
+      setValues((prev) => ({ ...prev, [fieldId]: nextValue }));
+      clearFieldError(fieldId);
+    },
+    [clearFieldError]
+  );
 
-  const handleCheckboxChange = useCallback((fieldId: string, option: string, checked: boolean) => {
-    setValues(prev => {
-      const current = (prev[fieldId] as string[]) || [];
-      const next = checked ? [...current, option] : current.filter((item) => item !== option);
-      return { ...prev, [fieldId]: next };
-    });
-    clearFieldError(fieldId);
-  }, [clearFieldError]);
+  const handleCheckboxChange = useCallback(
+    (fieldId: string, option: string, checked: boolean) => {
+      setValues((prev) => {
+        const current = (prev[fieldId] as string[]) || [];
+        const next = checked ? [...current, option] : current.filter((item) => item !== option);
+        return { ...prev, [fieldId]: next };
+      });
+      clearFieldError(fieldId);
+    },
+    [clearFieldError]
+  );
 
   return {
     values,

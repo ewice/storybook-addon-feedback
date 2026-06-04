@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vite-plus/test';
 import { renderHook, act } from '@testing-library/react';
 import { useSurveyLifecycle } from './useSurveyLifecycle';
 import { SurveyConfig } from '../types';
@@ -8,6 +8,7 @@ describe('useSurveyLifecycle', () => {
   let mockPersistence: SurveyStorage;
   const mockConfig: SurveyConfig = {
     surveyId: 'test-survey',
+    title: 'Test Survey',
     questions: [{ id: 'q1', type: 'text', label: 'Q1' }],
     trigger: {
       delayMs: 2000,

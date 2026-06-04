@@ -30,7 +30,7 @@ export const submitFeedbackWebhook = async (
   // Inject custom headers if provided, ensuring content-type is json
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(config.webhookHeaders || {})
+    ...config.webhookHeaders
   };
 
   try {

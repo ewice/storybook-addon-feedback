@@ -1,12 +1,13 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vite-plus/test';
 import { renderHook, act } from '@testing-library/react';
-import { FormEvent } from 'react';
+import { SubmitEvent } from 'react';
 import { useSurveyForm } from './useSurveyForm';
 import { SurveyConfig } from '../types';
 
 describe('useSurveyForm', () => {
   const mockConfig: SurveyConfig = {
     surveyId: 'test-survey',
+    title: 'Test Survey',
     questions: [
       { id: 'q1', type: 'text', label: 'Question 1', required: true },
       { id: 'q2', type: 'checkbox', label: 'Question 2', required: false, options: ['A', 'B'] }
@@ -76,7 +77,7 @@ describe('useSurveyForm', () => {
       })
     );
 
-    const mockEvent = { preventDefault: vi.fn() } as unknown as FormEvent<HTMLFormElement>;
+    const mockEvent = { preventDefault: vi.fn() } as unknown as SubmitEvent<HTMLFormElement>;
     await act(async () => {
       await result.current.handleSubmit(mockEvent);
     });
@@ -104,7 +105,7 @@ describe('useSurveyForm', () => {
       })
     );
 
-    const mockEvent = { preventDefault: vi.fn() } as unknown as FormEvent<HTMLFormElement>;
+    const mockEvent = { preventDefault: vi.fn() } as unknown as SubmitEvent<HTMLFormElement>;
     await act(async () => {
       await result.current.handleSubmit(mockEvent);
     });

@@ -9,8 +9,8 @@
     "preset.js"
   ],
   "scripts": {
-    "build": "tsup",
-    "watch": "tsup --watch"
+    "build": "vp pack",
+    "watch": "vp pack --watch"
   },
   "peerDependencies": {
     "@storybook/icons": "^2.0.0",

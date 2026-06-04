@@ -1,6 +1,0 @@
-node_modules
-dist
-storybook-static
-package-lock.json
-.idea
-*.log

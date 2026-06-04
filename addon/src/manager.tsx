@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// oxlint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 import { addons, types } from 'storybook/manager-api';
 import { FeedbackAddon } from './containers/FeedbackAddon';

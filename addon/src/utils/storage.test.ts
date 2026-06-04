@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vite-plus/test';
 import { safeStorage, createMemoryStorage } from './storage';
 
 describe('storage utils', () => {
@@ -27,14 +27,22 @@ describe('storage utils', () => {
     beforeEach(() => {
       vi.stubGlobal('localStorage', {
         getItem: vi.fn((key) => mockLocalStorage[key] ?? null),
-        setItem: vi.fn((key, val) => { mockLocalStorage[key] = val; }),
-        removeItem: vi.fn((key) => { delete mockLocalStorage[key]; })
+        setItem: vi.fn((key, val) => {
+          mockLocalStorage[key] = val;
+        }),
+        removeItem: vi.fn((key) => {
+          delete mockLocalStorage[key];
+        })
       });
 
       vi.stubGlobal('sessionStorage', {
         getItem: vi.fn((key) => mockSessionStorage[key] ?? null),
-        setItem: vi.fn((key, val) => { mockSessionStorage[key] = val; }),
-        removeItem: vi.fn((key) => { delete mockSessionStorage[key]; })
+        setItem: vi.fn((key, val) => {
+          mockSessionStorage[key] = val;
+        }),
+        removeItem: vi.fn((key) => {
+          delete mockSessionStorage[key];
+        })
       });
     });
 

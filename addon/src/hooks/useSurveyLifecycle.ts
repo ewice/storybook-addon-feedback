@@ -86,13 +86,7 @@ export const useSurveyLifecycle = ({
         clearTimeout(timerRef.current);
       }
     };
-  }, [
-    shouldBlockAutoPopup,
-    config.questions,
-    triggerOptions.delayMs,
-    isOpen,
-    recordImpression
-  ]);
+  }, [shouldBlockAutoPopup, config.questions, triggerOptions.delayMs, isOpen, recordImpression]);
 
   // 3. Handle Story Navigation Count Trigger
   useEffect(() => {

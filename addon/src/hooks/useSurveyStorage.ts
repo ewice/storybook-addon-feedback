@@ -11,7 +11,10 @@ export interface SurveyStorageState {
   isSessionDismissed: boolean;
 }
 
-export const useSurveyStorage = (surveyId: string, storageAdapter: StorageAdapter = safeStorage) => {
+export const useSurveyStorage = (
+  surveyId: string,
+  storageAdapter: StorageAdapter = safeStorage
+) => {
   const completedKey = STORAGE_KEYS.completed(surveyId);
   const skippedPermanentlyKey = STORAGE_KEYS.skippedPermanently(surveyId);
   const dismissedAtKey = STORAGE_KEYS.dismissedAt(surveyId);
@@ -131,19 +134,19 @@ export const useSurveyStorage = (surveyId: string, storageAdapter: StorageAdapte
       isSkippedPermanently: state.isSkippedPermanently,
       dismissedAt: state.dismissedAt,
       impressionCount: state.impressionCount,
-      isSessionDismissed: state.isSessionDismissed,
+      isSessionDismissed: state.isSessionDismissed
     },
     actions: {
       complete: setCompleted,
       skipPermanently: setSkippedPermanently,
       dismiss: setDismissed,
-      recordImpression: incrementImpressions,
+      recordImpression: incrementImpressions
     },
     draft: {
       get: getDraft,
       save: saveDraft,
-      clear: clearDraft,
-    },
+      clear: clearDraft
+    }
   };
 };
 
