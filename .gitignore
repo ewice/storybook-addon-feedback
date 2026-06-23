@@ -1,2 +1,10 @@
-.idea
 node_modules
+
+# IDE
+.idea
+,vscode
+
+# AI
+.claude
+.codex
+.kiro

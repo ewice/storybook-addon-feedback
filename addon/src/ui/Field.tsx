@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { styled } from 'storybook/theming';
-import { Label, LabelContent } from './Label';
 import { ErrorText } from './ErrorText';
+import { Label, LabelContent } from './Label';
 
 const FieldContainer = styled.div({
   display: 'flex',

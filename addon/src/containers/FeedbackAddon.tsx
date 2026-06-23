@@ -1,15 +1,15 @@
-import { FC } from 'react';
-import { useParameter, API } from 'storybook/manager-api';
-import { Button } from 'storybook/internal/components';
 import { SupportIcon } from '@storybook/icons';
+import { FC, useMemo } from 'react';
+import { Button } from 'storybook/internal/components';
+import { useParameter, API } from 'storybook/manager-api';
 import { styled } from 'storybook/theming';
-import { SurveyConfig, SurveyResponses } from '../types';
-import { useSurveyStorage } from '../hooks/useSurveyStorage';
-import { useSurveyLifecycle } from '../hooks/useSurveyLifecycle';
-import { submitFeedbackWebhook } from '../utils/api';
-import { CHANNEL_EVENTS } from '../constants';
-import { DialogSurface } from '../ui/DialogSurface';
+import type { SurveyConfig, SurveyResponses } from '../types';
 import { SurveyForm } from '../components/SurveyForm';
+import { CHANNEL_EVENTS, DEFAULT_SURVEY_ID } from '../constants';
+import { useSurveyLifecycle } from '../hooks/useSurveyLifecycle';
+import { useSurveyStorage } from '../hooks/useSurveyStorage';
+import { DialogSurface } from '../ui/DialogSurface';
+import { submitFeedbackWebhook } from '../utils/api';
 
 const IconWrapper = styled.div({
   position: 'relative',
@@ -33,23 +33,29 @@ interface FeedbackAddonProps {
 }
 
 export const FeedbackAddon: FC<FeedbackAddonProps> = ({ api }) => {
-  const buildTimeOptions =
-    typeof STORYBOOK_FEEDBACK_SURVEY_OPTIONS === 'undefined'
-      ? {}
-      : STORYBOOK_FEEDBACK_SURVEY_OPTIONS;
+  const buildTimeOptions = useMemo(
+    () =>
+      typeof STORYBOOK_FEEDBACK_SURVEY_OPTIONS === 'undefined'
+        ? undefined
+        : STORYBOOK_FEEDBACK_SURVEY_OPTIONS,
+    []
+  );
 
   const parameterOptions = useParameter<SurveyConfig | null>('feedbackSurvey', null);
 
-  const config: SurveyConfig = {
-    surveyId: 'default-survey-v1',
-    title: 'Feedback Survey',
-    description: 'Help us improve by sharing your thoughts!',
-    questions: [],
-    ...buildTimeOptions,
-    ...parameterOptions
-  };
+  const config: SurveyConfig = useMemo(
+    () => ({
+      surveyId: DEFAULT_SURVEY_ID,
+      title: 'Feedback Survey',
+      description: 'Help us improve by sharing your thoughts!',
+      questions: [],
+      ...buildTimeOptions,
+      ...parameterOptions
+    }),
+    [buildTimeOptions, parameterOptions]
+  );
 
-  const storage = useSurveyStorage(config.surveyId);
+  const storage = useSurveyStorage(config.surveyId, undefined, config.questions);
 
   const { isOpen, setIsOpen } = useSurveyLifecycle({
     config,

@@ -8,9 +8,9 @@ import {
   type MouseEvent
 } from 'react';
 import { styled } from 'storybook/theming';
-import { modalCardShadow } from './styles';
-import { DialogHeader } from './DialogHeader';
 import { DialogBody } from './DialogBody';
+import { DialogHeader } from './DialogHeader';
+import { modalCardShadow } from './styles';
 
 const DialogRoot = styled.dialog(({ theme }) => ({
   padding: 0,

@@ -1,19 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
-import { SurveyResponses } from '../types';
+import type { SurveyField, SurveyResponses } from '../types';
 import { STORAGE_KEYS } from '../constants';
-import { safeStorage, StorageAdapter } from '../utils/storage';
+import { sanitizeDraft } from '../utils/draft';
+import { safeStorage, type StorageAdapter } from '../utils/storage';
+import {
+  readSurveyState,
+  parseBooleanFlag,
+  parseDismissedAt,
+  parseImpressionCount,
+  type SurveyStorageState
+} from '../utils/surveyState';
 
-export interface SurveyStorageState {
-  isCompleted: boolean;
-  isSkippedPermanently: boolean;
-  dismissedAt: number | null;
-  impressionCount: number;
-  isSessionDismissed: boolean;
-}
+export type { SurveyStorageState };
 
 export const useSurveyStorage = (
   surveyId: string,
-  storageAdapter: StorageAdapter = safeStorage
+  storageAdapter: StorageAdapter = safeStorage,
+  questions: SurveyField[] = []
 ) => {
   const completedKey = STORAGE_KEYS.completed(surveyId);
   const skippedPermanentlyKey = STORAGE_KEYS.skippedPermanently(surveyId);
@@ -22,63 +25,39 @@ export const useSurveyStorage = (
   const impressionCountKey = STORAGE_KEYS.impressionCount(surveyId);
   const draftKey = STORAGE_KEYS.draft(surveyId);
 
-  const [state, setState] = useState<SurveyStorageState>(() => {
-    const isCompleted = storageAdapter.getItem(completedKey) === 'true';
-    const isSkippedPermanently = storageAdapter.getItem(skippedPermanentlyKey) === 'true';
-    const dismissed = storageAdapter.getItem(dismissedAtKey);
-    const dismissedAt = dismissed ? Number(dismissed) : null;
-    const impressionCount = parseInt(storageAdapter.getItem(impressionCountKey) || '0', 10);
-    const isSessionDismissed = storageAdapter.getItem(sessionDismissedKey, true) === 'true';
+  const [state, setState] = useState<SurveyStorageState>(() =>
+    readSurveyState(storageAdapter, surveyId)
+  );
 
-    return {
-      isCompleted,
-      isSkippedPermanently,
-      dismissedAt,
-      impressionCount,
-      isSessionDismissed
-    };
-  });
-
-  // Keep state in sync if surveyId changes dynamically
   useEffect(() => {
-    const isCompleted = storageAdapter.getItem(completedKey) === 'true';
-    const isSkippedPermanently = storageAdapter.getItem(skippedPermanentlyKey) === 'true';
-    const dismissed = storageAdapter.getItem(dismissedAtKey);
-    const dismissedAt = dismissed ? Number(dismissed) : null;
-    const impressionCount = parseInt(storageAdapter.getItem(impressionCountKey) || '0', 10);
-    const isSessionDismissed = storageAdapter.getItem(sessionDismissedKey, true) === 'true';
-
-    setState({
-      isCompleted,
-      isSkippedPermanently,
-      dismissedAt,
-      impressionCount,
-      isSessionDismissed
-    });
+    setState(readSurveyState(storageAdapter, surveyId));
   }, [
     completedKey,
     skippedPermanentlyKey,
     dismissedAtKey,
     impressionCountKey,
     sessionDismissedKey,
-    storageAdapter
+    storageAdapter,
+    surveyId
   ]);
 
-  // Synchronize state across browser tabs/windows
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === completedKey) {
-        setState((prev) => ({ ...prev, isCompleted: e.newValue === 'true' }));
-      }
-      if (e.key === skippedPermanentlyKey) {
-        setState((prev) => ({ ...prev, isSkippedPermanently: e.newValue === 'true' }));
+        setState((prev) => ({ ...prev, isCompleted: parseBooleanFlag(e.newValue) }));
+      } else if (e.key === skippedPermanentlyKey) {
+        setState((prev) => ({ ...prev, isSkippedPermanently: parseBooleanFlag(e.newValue) }));
+      } else if (e.key === dismissedAtKey) {
+        setState((prev) => ({ ...prev, dismissedAt: parseDismissedAt(e.newValue) }));
+      } else if (e.key === impressionCountKey) {
+        setState((prev) => ({ ...prev, impressionCount: parseImpressionCount(e.newValue) }));
       }
     };
     window.addEventListener('storage', handleStorageChange);
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [completedKey, skippedPermanentlyKey]);
+  }, [completedKey, skippedPermanentlyKey, dismissedAtKey, impressionCountKey]);
 
   const setCompleted = useCallback(() => {
     storageAdapter.setItem(completedKey, 'true');
@@ -108,14 +87,9 @@ export const useSurveyStorage = (
   }, [impressionCountKey, storageAdapter]);
 
   const getDraft = useCallback((): SurveyResponses => {
-    const draft = storageAdapter.getItem(draftKey, true);
-    if (!draft) return {};
-    try {
-      return JSON.parse(draft);
-    } catch {
-      return {};
-    }
-  }, [draftKey, storageAdapter]);
+    const raw = storageAdapter.getItem(draftKey, true);
+    return sanitizeDraft(raw, questions);
+  }, [draftKey, storageAdapter, questions]);
 
   const saveDraft = useCallback(
     (values: SurveyResponses) => {

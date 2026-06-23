@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, SubmitEvent } from 'react';
-import { SurveyConfig, SurveyResponses, SurveyResponseValue } from '../types';
+import type { SurveyConfig, SurveyResponses, SurveyResponseValue } from '../types';
+import { MESSAGES, resolveMessage } from '../utils/messages';
 import { validateSurvey } from '../utils/validation';
 
 export interface UseSurveyFormProps {
@@ -37,7 +38,7 @@ export const useSurveyForm = ({
   }, []);
 
   const validate = useCallback(() => {
-    const nextErrors = validateSurvey(config.questions, valuesRef.current);
+    const nextErrors = validateSurvey(config.questions, valuesRef.current, config.messages);
     setErrors(nextErrors);
 
     const firstInvalidQuestionId = config.questions.find((question) => nextErrors[question.id])?.id;
@@ -46,7 +47,7 @@ export const useSurveyForm = ({
     }
 
     return Object.keys(nextErrors).length === 0;
-  }, [config.questions, focusQuestion]);
+  }, [config.questions, config.messages, focusQuestion]);
 
   const handleSubmit = useCallback(
     async (event: SubmitEvent<HTMLFormElement>) => {
@@ -63,17 +64,17 @@ export const useSurveyForm = ({
         await onSubmit(valuesRef.current);
         clearDraft();
         setIsSubmitted(true);
-      } catch (error) {
-        console.error('Failed to submit survey:', error);
-        setSubmissionError('Failed to submit feedback. Please try again.');
+      } catch {
+        setSubmissionError(
+          resolveMessage(config.messages?.submissionFailure, MESSAGES.submissionFailure)
+        );
       } finally {
         setIsSubmitting(false);
       }
     },
-    [validate, onSubmit, clearDraft]
+    [validate, onSubmit, clearDraft, config.messages]
   );
 
-  // Save draft on beforeunload (covers tab close / navigation)
   useEffect(() => {
     const save = () => {
       if (!isSubmitted) {

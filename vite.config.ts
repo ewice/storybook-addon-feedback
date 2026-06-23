@@ -1,11 +1,15 @@
 import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
+  test: {
+    environment: 'jsdom',
+    globals: true
+  },
   staged: {
     '*': 'vp check --fix'
   },
   lint: {
-    plugins: ['oxc', 'typescript', 'unicorn', 'react'],
+    plugins: ['oxc', 'typescript', 'unicorn', 'react', 'import'],
     categories: {
       correctness: 'warn'
     },
@@ -164,6 +168,14 @@ export default defineConfig({
           commonjs: true,
           node: true
         }
+      },
+      {
+        files: ['addon/src/**/*.{ts,tsx}'],
+        rules: {
+          'import/no-default-export': 'error',
+          'no-console': ['error', { allow: ['error'] }],
+          'typescript/no-explicit-any': 'error'
+        }
       }
     ],
     options: {
@@ -185,6 +197,18 @@ export default defineConfig({
     tabWidth: 2,
     trailingComma: 'none',
     sortPackageJson: false,
+    sortImports: {
+      newlinesBetween: false,
+      groups: [
+        'type-import',
+        ['value-builtin', 'value-external'],
+        'type-internal',
+        'value-internal',
+        ['type-parent', 'type-sibling', 'type-index'],
+        ['value-parent', 'value-sibling', 'value-index'],
+        'unknown'
+      ]
+    },
     ignorePatterns: [
       'node_modules',
       'dist',

@@ -20,7 +20,7 @@ export const safeStorage: StorageAdapter = {
         localStorage.setItem(key, value);
       }
     } catch {
-      // Graceful fallback if storage is blocked
+      // Storage may be blocked by browser settings
     }
   },
   removeItem(key, isSession = false) {
@@ -31,7 +31,7 @@ export const safeStorage: StorageAdapter = {
         localStorage.removeItem(key);
       }
     } catch {
-      // Graceful fallback if storage is blocked
+      // Storage may be blocked by browser settings
     }
   }
 };

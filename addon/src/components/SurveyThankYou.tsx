@@ -1,7 +1,9 @@
 import { FC } from 'react';
 import { styled } from 'storybook/theming';
+import type { SurveyMessages } from '../types';
 import { Button } from '../ui/Button';
 import { mutedTextStyles } from '../ui/styles';
+import { COMPONENT_MESSAGES, resolveMessage } from '../utils/messages';
 
 const ThankYouContainer = styled.div(({ theme }) => ({
   display: 'flex',
@@ -35,14 +37,21 @@ const CenteredActions = styled.div({
 
 interface SurveyThankYouProps {
   onClose: () => void;
+  messages?: SurveyMessages;
 }
 
-export const SurveyThankYou: FC<SurveyThankYouProps> = ({ onClose }) => (
-  <ThankYouContainer role="status" aria-live="polite">
-    <ThankYouTitle>Thank you!</ThankYouTitle>
-    <ThankYouText>Your feedback has been successfully submitted.</ThankYouText>
-    <CenteredActions>
-      <Button onClick={onClose}>Close</Button>
-    </CenteredActions>
-  </ThankYouContainer>
-);
+export const SurveyThankYou: FC<SurveyThankYouProps> = ({ onClose, messages }) => {
+  const titleText = resolveMessage(messages?.thankYouTitle, COMPONENT_MESSAGES.thankYouTitle);
+  const bodyText = resolveMessage(messages?.thankYouBody, COMPONENT_MESSAGES.thankYouBody);
+  const closeText = resolveMessage(messages?.thankYouClose, COMPONENT_MESSAGES.thankYouClose);
+
+  return (
+    <ThankYouContainer role="status" aria-live="polite">
+      <ThankYouTitle>{titleText}</ThankYouTitle>
+      <ThankYouText>{bodyText}</ThankYouText>
+      <CenteredActions>
+        <Button onClick={onClose}>{closeText}</Button>
+      </CenteredActions>
+    </ThankYouContainer>
+  );
+};

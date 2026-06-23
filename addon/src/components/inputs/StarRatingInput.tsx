@@ -1,7 +1,10 @@
 import { StarIcon } from '@storybook/icons';
 import { useState, Ref } from 'react';
 import { styled } from 'storybook/theming';
+import { MAX_STAR_RATING } from '../../constants';
 import { focusRing } from '../../ui/styles';
+
+const STAR_VALUES = Array.from({ length: MAX_STAR_RATING }, (_, index) => index + 1);
 
 const StarsContainer = styled.div({
   display: 'flex',
@@ -66,7 +69,7 @@ export const StarRatingInput = ({
 
   return (
     <StarsContainer>
-      {[1, 2, 3, 4, 5].map((starValue) => {
+      {STAR_VALUES.map((starValue) => {
         const active = value >= starValue;
         const hoverActive = hoverRating >= starValue;
         return (
@@ -87,7 +90,7 @@ export const StarRatingInput = ({
               value={String(starValue)}
               checked={value === starValue}
               onChange={() => onChange(starValue)}
-              aria-label={`${starValue} out of 5 stars`}
+              aria-label={`${starValue} out of ${MAX_STAR_RATING} stars`}
               aria-describedby={ariaDescribedBy}
               aria-invalid={ariaInvalid || undefined}
             />

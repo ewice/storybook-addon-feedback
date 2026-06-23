@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { SurveyConfig } from '../types';
+import type { SurveyConfig } from '../types';
+import type { SurveyStorage } from './useSurveyStorage';
 import { DEFAULT_DELAY_MS, DEFAULT_STORY_COUNT, MS_PER_DAY } from '../constants';
-import { SurveyStorage } from './useSurveyStorage';
 
 export interface SurveyLifecycleProps {
   config: SurveyConfig;
@@ -21,7 +21,6 @@ export const useSurveyLifecycle = ({
 
   const triggerOptions = config.trigger || {};
 
-  // 1. Calculate Suppression States
   const shouldBlockAutoPopup = useMemo(() => {
     const isCompleted = persistence.state.isCompleted;
     const isSkippedPermanently = persistence.state.isSkippedPermanently;
@@ -66,7 +65,6 @@ export const useSurveyLifecycle = ({
     triggerOptions.coolDownDays
   ]);
 
-  // 2. Handle Automatic Time-Delay Trigger
   useEffect(() => {
     if (shouldBlockAutoPopup || isOpen || !config.questions || config.questions.length === 0) {
       return;
@@ -88,7 +86,6 @@ export const useSurveyLifecycle = ({
     };
   }, [shouldBlockAutoPopup, config.questions, triggerOptions.delayMs, isOpen, recordImpression]);
 
-  // 3. Handle Story Navigation Count Trigger
   useEffect(() => {
     const handleStoryChanged = () => {
       setNavCount((prev) => {
@@ -110,7 +107,6 @@ export const useSurveyLifecycle = ({
     };
   }, [onStoryChange, shouldBlockAutoPopup, triggerOptions.storyCount, isOpen, recordImpression]);
 
-  // 4. Handle Global Keyboard Shortcut Override (Alt + Shift + S)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && e.shiftKey && e.key.toLowerCase() === 's') {

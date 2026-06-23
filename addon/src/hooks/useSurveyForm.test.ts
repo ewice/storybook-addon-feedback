@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vite-plus/test';
 import { renderHook, act } from '@testing-library/react';
 import { SubmitEvent } from 'react';
+import { describe, it, expect, vi } from 'vite-plus/test';
+import type { SurveyConfig } from '../types';
 import { useSurveyForm } from './useSurveyForm';
-import { SurveyConfig } from '../types';
 
 describe('useSurveyForm', () => {
   const mockConfig: SurveyConfig = {
@@ -135,5 +135,61 @@ describe('useSurveyForm', () => {
     unmount();
 
     expect(saveDraft).toHaveBeenCalledWith({ q1: 'Some Text' });
+  });
+
+  it('should set submissionError and clear isSubmitting on submission failure', async () => {
+    const getDraft = vi.fn().mockReturnValue({ q1: 'Valid text' });
+    const saveDraft = vi.fn();
+    const clearDraft = vi.fn();
+    const onSubmit = vi.fn().mockRejectedValue(new Error('Network error'));
+
+    const { result } = renderHook(() =>
+      useSurveyForm({
+        config: mockConfig,
+        isCompleted: false,
+        onSubmit,
+        getDraft,
+        saveDraft,
+        clearDraft
+      })
+    );
+
+    const mockEvent = { preventDefault: vi.fn() } as unknown as SubmitEvent<HTMLFormElement>;
+    await act(async () => {
+      await result.current.handleSubmit(mockEvent);
+    });
+
+    expect(result.current.isSubmitting).toBe(false);
+    expect(result.current.submissionError).toBe('Failed to submit feedback. Please try again.');
+    expect(result.current.isSubmitted).toBe(false);
+  });
+
+  it('should not emit console.error from the form hook on submission failure', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const getDraft = vi.fn().mockReturnValue({ q1: 'Valid text' });
+    const saveDraft = vi.fn();
+    const clearDraft = vi.fn();
+    const onSubmit = vi.fn().mockRejectedValue(new Error('Network error'));
+
+    const { result } = renderHook(() =>
+      useSurveyForm({
+        config: mockConfig,
+        isCompleted: false,
+        onSubmit,
+        getDraft,
+        saveDraft,
+        clearDraft
+      })
+    );
+
+    const mockEvent = { preventDefault: vi.fn() } as unknown as SubmitEvent<HTMLFormElement>;
+    await act(async () => {
+      await result.current.handleSubmit(mockEvent);
+    });
+
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    consoleErrorSpy.mockRestore();
   });
 });

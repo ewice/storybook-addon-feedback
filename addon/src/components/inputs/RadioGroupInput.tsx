@@ -1,5 +1,5 @@
 import { Ref } from 'react';
-import { Choice, ChoiceGroup, ChoiceInput } from '../../ui/Choice';
+import { ChoiceGroupPrimitive } from './ChoiceGroupPrimitive';
 
 interface RadioGroupInputProps {
   name: string;
@@ -13,32 +13,24 @@ interface RadioGroupInputProps {
 }
 
 export const RadioGroupInput = ({
-  ariaDescribedBy,
-  ariaInvalid,
-  direction,
   name,
   options,
   value,
   onChange,
+  ariaDescribedBy,
+  ariaInvalid,
+  direction,
   ref
-}: RadioGroupInputProps) => {
-  return (
-    <ChoiceGroup direction={direction}>
-      {options.map((option, index) => (
-        <Choice key={option} htmlFor={`${name}-${index}`}>
-          <ChoiceInput
-            ref={index === 0 ? ref : undefined}
-            aria-describedby={ariaDescribedBy}
-            aria-invalid={ariaInvalid || undefined}
-            checked={value === option}
-            id={`${name}-${index}`}
-            name={name}
-            type="radio"
-            onChange={() => onChange(option)}
-          />
-          {option}
-        </Choice>
-      ))}
-    </ChoiceGroup>
-  );
-};
+}: RadioGroupInputProps) => (
+  <ChoiceGroupPrimitive
+    mode="radio"
+    name={name}
+    options={options}
+    value={value}
+    onChange={onChange}
+    ariaDescribedBy={ariaDescribedBy}
+    ariaInvalid={ariaInvalid}
+    direction={direction}
+    ref={ref}
+  />
+);

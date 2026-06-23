@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vite-plus/test';
 import { renderHook, act } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vite-plus/test';
+import type { SurveyConfig } from '../types';
+import type { SurveyStorage } from './useSurveyStorage';
 import { useSurveyLifecycle } from './useSurveyLifecycle';
-import { SurveyConfig } from '../types';
-import { SurveyStorage } from './useSurveyStorage';
 
 describe('useSurveyLifecycle', () => {
   let mockPersistence: SurveyStorage;
@@ -81,13 +81,6 @@ describe('useSurveyLifecycle', () => {
       })
     );
 
-    // Initial state is closed
-    expect(result.current.isOpen).toBe(false);
-
-    // Navigate stories
-    act(() => {
-      storyChangeHandler();
-    });
     expect(result.current.isOpen).toBe(false);
 
     act(() => {
@@ -95,7 +88,11 @@ describe('useSurveyLifecycle', () => {
     });
     expect(result.current.isOpen).toBe(false);
 
-    // Third navigation should trigger it (storyCount: 3)
+    act(() => {
+      storyChangeHandler();
+    });
+    expect(result.current.isOpen).toBe(false);
+
     act(() => {
       storyChangeHandler();
     });

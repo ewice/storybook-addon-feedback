@@ -1,10 +1,33 @@
-import { SurveyConfig, SurveyResponses } from '../types';
+import type { SurveyConfig, SurveyResponses } from '../types';
+import {
+  DEFAULT_WEBHOOK_TIMEOUT_MS,
+  MIN_WEBHOOK_TIMEOUT_MS,
+  MAX_WEBHOOK_TIMEOUT_MS
+} from '../constants';
 
 export interface FeedbackPayload {
   surveyId: string;
   timestamp: string;
   responses: SurveyResponses;
 }
+
+/**
+ * Resolves the webhook request timeout in milliseconds. Returns the configured
+ * value when it is a finite number within the allowed bounds; otherwise falls
+ * back to the default timeout.
+ */
+export const resolveTimeout = (config: SurveyConfig): number => {
+  const configuredTimeout = config.requestTimeoutMs;
+  if (
+    typeof configuredTimeout === 'number' &&
+    Number.isFinite(configuredTimeout) &&
+    configuredTimeout >= MIN_WEBHOOK_TIMEOUT_MS &&
+    configuredTimeout <= MAX_WEBHOOK_TIMEOUT_MS
+  ) {
+    return configuredTimeout;
+  }
+  return DEFAULT_WEBHOOK_TIMEOUT_MS;
+};
 
 /**
  * Dispatches the survey feedback payload to the designated webhook endpoint.
@@ -27,25 +50,33 @@ export const submitFeedbackWebhook = async (
     return payload;
   }
 
-  // Inject custom headers if provided, ensuring content-type is json
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...config.webhookHeaders
-  };
+  const controller = new AbortController();
+  const timeoutMs = resolveTimeout(config);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const res = await fetch(config.webhookUrl, {
+    const response = await fetch(config.webhookUrl, {
       method: 'POST',
-      headers,
-      body: JSON.stringify(payload)
+      headers: {
+        'Content-Type': 'application/json',
+        ...config.webhookHeaders
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
 
-    if (!res.ok) {
-      throw new Error(`Server responded with status ${res.status}: ${res.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}: ${response.statusText}`);
     }
-  } catch (err) {
-    console.error('[Feedback Survey Addon] Webhook submission failed:', err);
-    throw err;
+  } catch (caughtError) {
+    const error =
+      caughtError instanceof Error && caughtError.name === 'AbortError'
+        ? new Error(`Webhook request timed out after ${timeoutMs}ms`)
+        : caughtError;
+    console.error('[Feedback Survey Addon] Webhook submission failed:', error);
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
 
   return payload;

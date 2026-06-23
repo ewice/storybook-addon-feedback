@@ -1,0 +1,20 @@
+[21:19:24.832] [INFO] storybook v10.4.1
+[21:19:26.492] [DEBUG] Getting package.json info for C:/Users/henni/Documents/Git/storybook-addon-feedback/package.json...
+[21:19:26.518] [INFO] Storybook collects completely anonymous usage telemetry. We use it to shape Storybook's roadmap and prioritize features. You can learn more, including how to opt out, at https://storybook.js.org/telemetry
+[21:19:28.873] [INFO] Starting...
+[21:19:28.878] [ERROR] [38;2;241;97;97mError: Cannot find module './dist/manager.mjs'
+Require stack:
+- C:\Users\henni\Documents\Git\storybook-addon-feedback\addon\preset.js[39m
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at Function.resolve (node:internal/modules/helpers:157:19)
+    at Object.managerEntries (C:\Users\henni\Documents\Git\storybook-addon-feedback\addon\preset.js:2:29)
+    at file:///C:/Users/henni/Documents/Git/storybook-addon-feedback/node_modules/storybook/dist/_node-chunks/chunk-PNYLLFX3.js:9190:36
+    at async Promise.all (index 0)
+    at async getConfig (file:///C:/Users/henni/Documents/Git/storybook-addon-feedback/node_modules/storybook/dist/_node-chunks/builder-manager-H3RE756K.js:1419:43)
+    at async Promise.all (index 1)
+    at async getData (file:///C:/Users/henni/Documents/Git/storybook-addon-feedback/node_modules/storybook/dist/_node-chunks/builder-manager-H3RE756K.js:1334:444)
+    at async starter (file:///C:/Users/henni/Documents/Git/storybook-addon-feedback/node_modules/storybook/dist/_node-chunks/builder-manager-H3RE756K.js:1513:7)
+    at async Module.start (file:///C:/Users/henni/Documents/Git/storybook-addon-feedback/node_modules/storybook/dist/_node-chunks/builder-manager-H3RE756K.js:1625:14)
+[21:19:28.885] [WARN] Broken build, fix the error above.
+You may need to refresh the browser.
+[21:19:32.763] [PROMPT] Would you like to send anonymous crash reports to improve Storybook and fix bugs faster? {"choice":false}

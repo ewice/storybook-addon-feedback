@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { styled } from 'storybook/theming';
-import { SurveyConfig, SurveyResponses } from '../types';
+import type { SurveyConfig, SurveyResponses } from '../types';
 import { useSurveyForm } from '../hooks/useSurveyForm';
-import { QuestionRenderer } from './QuestionRenderer';
 import { Button } from '../ui/Button';
 import { ErrorSummary } from '../ui/ErrorSummary';
+import { COMPONENT_MESSAGES, resolveMessage } from '../utils/messages';
+import { QuestionRenderer } from './QuestionRenderer';
 import { SurveyThankYou } from './SurveyThankYou';
 
 const FormContainer = styled.form(({ theme }) => ({
@@ -64,8 +65,22 @@ export const SurveyForm: FC<SurveyFormProps> = ({
     fieldRefs
   } = useSurveyForm({ config, isCompleted, onSubmit, getDraft, saveDraft, clearDraft });
 
+  const skipPermanentLabel = resolveMessage(
+    config.messages?.skipPermanent,
+    COMPONENT_MESSAGES.skipPermanent
+  );
+  const cancelLabel = resolveMessage(config.messages?.cancel, COMPONENT_MESSAGES.cancel);
+  const submitLabel = resolveMessage(
+    config.messages?.submitFeedback,
+    COMPONENT_MESSAGES.submitFeedback
+  );
+  const submittingLabel = resolveMessage(
+    config.messages?.submitting,
+    COMPONENT_MESSAGES.submitting
+  );
+
   if (isSubmitted) {
-    return <SurveyThankYou onClose={onClose} />;
+    return <SurveyThankYou onClose={onClose} messages={config.messages} />;
   }
 
   const errorSummaryItems = config.questions
@@ -96,13 +111,13 @@ export const SurveyForm: FC<SurveyFormProps> = ({
 
       <FooterActions>
         <Button variant="dangerSubtle" onClick={onSkipPermanent}>
-          {"Don't show again"}
+          {skipPermanentLabel}
         </Button>
         <Button variant="secondary" onClick={onClose}>
-          Cancel
+          {cancelLabel}
         </Button>
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+          {isSubmitting ? submittingLabel : submitLabel}
         </Button>
       </FooterActions>
     </FormContainer>

@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { styled } from 'storybook/theming';
-import { fieldTextStyles } from './styles';
-import { CommonFieldProps } from './Field';
-import { LabelContent } from './Label';
+import type { CommonFieldProps } from './Field';
 import { ErrorText } from './ErrorText';
+import { LabelContent } from './Label';
+import { fieldTextStyles } from './styles';
 
 const GroupFieldContainer = styled.fieldset({
   display: 'flex',

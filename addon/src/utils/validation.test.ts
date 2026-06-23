@@ -1,6 +1,8 @@
+import * as fc from 'fast-check';
 import { describe, it, expect } from 'vite-plus/test';
+import type { SurveyField } from '../types';
+import { resolveMessage } from './messages';
 import { validateSurvey } from './validation';
-import { SurveyField } from '../types';
 
 describe('validateSurvey', () => {
   it('should pass validation when all fields are optional and empty', () => {
@@ -56,5 +58,42 @@ describe('validateSurvey', () => {
       q3: ['A']
     });
     expect(errors).toEqual({});
+  });
+});
+
+describe('resolveMessage - Property 12: Message override resolution', () => {
+  const FALLBACK = 'default fallback';
+
+  it('returns the override when it contains at least one non-whitespace character', () => {
+    fc.assert(
+      fc.property(
+        fc.string({ minLength: 1 }).filter((s) => s.trim().length > 0),
+        (override) => {
+          expect(resolveMessage(override, FALLBACK)).toBe(override);
+        }
+      ),
+      { numRuns: 100 }
+    );
+  });
+
+  it('returns the fallback when the override is whitespace-only', () => {
+    const whitespaceArb = fc
+      .array(fc.constantFrom(' ', '\t', '\n', '\r'), { minLength: 1, maxLength: 50 })
+      .map((chars) => chars.join(''));
+
+    fc.assert(
+      fc.property(whitespaceArb, (whitespaceOverride) => {
+        expect(resolveMessage(whitespaceOverride, FALLBACK)).toBe(FALLBACK);
+      }),
+      { numRuns: 100 }
+    );
+  });
+
+  it('returns the fallback when the override is an empty string', () => {
+    expect(resolveMessage('', FALLBACK)).toBe(FALLBACK);
+  });
+
+  it('returns the fallback when the override is undefined', () => {
+    expect(resolveMessage(undefined, FALLBACK)).toBe(FALLBACK);
   });
 });
