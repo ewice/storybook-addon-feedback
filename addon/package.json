@@ -12,13 +12,26 @@
     "build": "vp pack",
     "watch": "vp pack --watch"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ewice/storybook-addon-feedback.git"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/ewice/storybook-addon-feedback",
+  "keywords": [
+    "storybook",
+    "addon",
+    "feedback",
+    "survey",
+    "rating"
+  ],
   "peerDependencies": {
     "@storybook/icons": "^2.0.0",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "storybook": "^10.0.0"
-  },
-  "devDependencies": {
-    "fast-check": "^4.8.0"
   }
 }
