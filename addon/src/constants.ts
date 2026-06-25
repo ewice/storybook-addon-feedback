@@ -1,4 +1,4 @@
-export const ADDON_ID = 'storybook-feedback-survey';
+export const ADDON_ID = 'storybook-addon-feedback';
 export const TOOL_ID = `${ADDON_ID}/tool`;
 
 export const CHANNEL_EVENTS = {

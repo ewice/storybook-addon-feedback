@@ -6,8 +6,8 @@
     "demo"
   ],
   "scripts": {
-    "addon:build": "vp run storybook-feedback-survey#build",
-    "addon:watch": "vp run storybook-feedback-survey#watch",
+    "addon:build": "vp run storybook-addon-feedback#build",
+    "addon:watch": "vp run storybook-addon-feedback#watch",
     "demo:storybook": "vp run demo-storybook#storybook",
     "build": "vp run addon:build",
     "watch": "vp run addon:watch",

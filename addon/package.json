@@ -1,6 +1,6 @@
 {
-  "name": "storybook-feedback-survey",
-  "version": "1.0.0",
+  "name": "storybook-addon-feedback",
+  "version": "0.1.0",
   "description": "Storybook feedback survey addon to collect user ratings and reviews",
   "main": "preset.js",
   "types": "dist/types.d.ts",
