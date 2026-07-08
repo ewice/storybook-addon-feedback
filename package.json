@@ -32,7 +32,7 @@
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "storybook": "10.4.6",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vite-plus": "latest"
   },
   "packageManager": "npm@11.16.0",
